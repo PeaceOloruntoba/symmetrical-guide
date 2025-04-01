@@ -1,0 +1,24 @@
+{
+  "name": "symmetrical-guide",
+  "version": "1.0.0",
+  "description": "German Alibaba Backend",
+  "keywords": [
+    "Alibaba",
+    "ecommerce"
+  ],
+  "homepage": "https://github.com/PeaceOloruntoba/symmetrical-guide#readme",
+  "bugs": {
+    "url": "https://github.com/PeaceOloruntoba/symmetrical-guide/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PeaceOloruntoba/symmetrical-guide.git"
+  },
+  "license": "ISC",
+  "author": "Peace Oloruntoba",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
