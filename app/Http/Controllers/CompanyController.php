@@ -6,9 +6,12 @@ use App\Models\Company;
 use App\Models\User;
 use App\Models\Credit;
 use App\Models\Category;
+use App\Models\Order;
+use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class CompanyController extends Controller
 {
@@ -20,10 +23,56 @@ class CompanyController extends Controller
     public function dashboard()
     {
         $company = Auth::user()->company;
-        $products = $company->products()->latest()->take(8)->get();
-        $recentOrders = $company->orders()->latest()->take(5)->get();
 
-        return view('company.dashboard', compact('company', 'products', 'recentOrders'));
+        // Get statistics
+        $totalProducts = $company->products()->count();
+
+        // Get orders that contain products from this company
+        $companyOrders = Order::whereHas('items.product', function ($query) use ($company) {
+            $query->where('company_id', $company->id);
+        });
+
+        $totalOrders = $companyOrders->count();
+
+        // Calculate total sales from order items for this company's products
+        $totalSales = OrderItem::whereHas('product', function ($query) use ($company) {
+            $query->where('company_id', $company->id);
+        })->whereHas('order', function ($query) {
+            $query->where('status', 'delivered');
+        })->sum(\DB::raw('price * quantity'));
+
+        // Get company credit balance - assuming there's a credit_balance column in the companies table
+        $totalCredits = $company->credit_balance ?? 0;
+
+        // Get recent products
+        $recentProducts = $company->products()->latest()->take(5)->get();
+
+        // Get popular products (most ordered)
+        $popularProducts = $company->products()
+            ->withCount([
+                'orderItems as orders_count' => function ($query) {
+                    $query->select(\DB::raw('count(distinct order_id)'));
+                }
+            ])
+            ->orderBy('orders_count', 'desc')
+            ->take(5)
+            ->get();
+
+        // Get recent orders
+        $recentOrders = Order::whereHas('items.product', function ($query) use ($company) {
+            $query->where('company_id', $company->id);
+        })->with(['user', 'items.product'])->latest()->take(5)->get();
+
+        return view('company.dashboard', compact(
+            'company',
+            'totalProducts',
+            'totalOrders',
+            'totalSales',
+            'totalCredits',
+            'recentProducts',
+            'popularProducts',
+            'recentOrders'
+        ));
     }
 
     /**
@@ -122,14 +171,33 @@ class CompanyController extends Controller
     /**
      * Display the company's orders.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\View\View
      */
-    public function orders()
+    public function orders(Request $request)
     {
         $company = Auth::user()->company;
-        $orders = $company->orders()->with('user')->paginate(10);
 
-        return view('company.orders.index', compact('orders', 'company'));
+        $ordersQuery = Order::whereHas('items.product', function ($query) use ($company) {
+            $query->where('company_id', $company->id);
+        })->with(['user', 'items.product']);
+
+        // Apply filters
+        if ($request->filled('status')) {
+            $ordersQuery->where('status', $request->status);
+        }
+
+        if ($request->filled('date_from')) {
+            $ordersQuery->whereDate('created_at', '>=', $request->date_from);
+        }
+
+        if ($request->filled('date_to')) {
+            $ordersQuery->whereDate('created_at', '<=', $request->date_to);
+        }
+
+        $orders = $ordersQuery->latest()->paginate(15);
+
+        return view('company.orders.index', compact('company', 'orders'));
     }
 
     /**

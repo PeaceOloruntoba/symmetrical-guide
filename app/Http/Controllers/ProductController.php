@@ -67,7 +67,6 @@ class ProductController extends Controller
             'description' => $request->description,
             'price' => $request->price,
             'is_active' => true,
-            'status' => 'active',
         ]);
 
         $product->save();

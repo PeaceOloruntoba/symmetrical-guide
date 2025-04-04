@@ -5,11 +5,24 @@
 
 @section('content')
     <div class="container py-4">
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="badge bg-success">Products</span>
+                        <h1 class="mt-2 mb-0">{{ $company->company_name }}</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        @include('layouts.company-nav')
+
+        <!-- Edit Product Form -->
         <div class="card shadow-sm">
             <div class="card-body">
-                <h3 class="mb-4">JobiJob</h3>
-
-                <h4 class="mb-4">Edit product</h4>
+                <h4 class="mb-4">Edit Product</h4>
 
                 @if(session('error'))
                     <div class="alert alert-danger">
@@ -79,7 +92,7 @@
                             </div>
                             <button type="button" class="btn btn-sm btn-outline-success" data-bs-toggle="modal"
                                 data-bs-target="#addColorModal">
-                                <i class="fas fa-plus"></i> Add colors
+                                <i class="fas fa-plus me-1"></i> Add Color
                             </button>
                         </div>
                         <div id="colors-container">
@@ -93,37 +106,34 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label">Product pictures</label>
-                        <div class="d-flex align-items-center">
-                            <button type="button" class="btn btn-sm btn-outline-success"
-                                onclick="document.getElementById('product_images').click()">
-                                <i class="fas fa-plus"></i> Product pictures
-                            </button>
-                            <input type="file" id="product_images" name="new_images[]" multiple class="d-none"
-                                accept="image/*" onchange="previewNewImages(this)">
-                        </div>
-
-                        <!-- Existing images -->
-                        <div class="d-flex flex-wrap gap-2 mt-2">
+                        <label class="form-label">Current Images</label>
+                        <div class="d-flex flex-wrap gap-3 mb-3">
                             @foreach($product->images as $image)
                                 <div class="position-relative">
-                                    <img src="{{ Storage::url($image->path) }}" class="img-thumbnail"
-                                        style="width: 100px; height: 100px; object-fit: cover;">
-                                    <div class="form-check position-absolute bottom-0 end-0 bg-white rounded p-1">
-                                        <input class="form-check-input" type="checkbox" name="delete_images[]"
-                                            value="{{ $image->id }}" id="delete-image-{{ $image->id }}">
-                                        <label class="form-check-label" for="delete-image-{{ $image->id }}">
-                                            Delete
-                                        </label>
+                                    <img src="{{ asset('storage/' . $image->image_path) }}" alt="Product Image"
+                                        class="img-thumbnail" style="width: 100px; height: 100px; object-fit: cover;">
+                                    <div class="position-absolute top-0 end-0 d-flex">
+                                        <button type="button" class="btn btn-sm btn-danger"
+                                            onclick="document.getElementById('delete-image-{{ $image->id }}').submit();">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
                                     </div>
+                                    <form id="delete-image-{{ $image->id }}"
+                                        action="{{ route('company.products.images.destroy', $image) }}" method="POST"
+                                        class="d-none">
+                                        @csrf
+                                        @method('DELETE')
+                                    </form>
                                 </div>
                             @endforeach
                         </div>
 
+                        <label class="form-label">Add New Images</label>
+                        <input type="file" class="form-control @error('new_images') is-invalid @enderror"
+                            name="new_images[]" multiple accept="image/*" onchange="previewNewImages(this)">
+
                         <!-- New image previews -->
-                        <div id="new-image-previews" class="d-flex flex-wrap gap-2 mt-2">
-                            <!-- New image previews will be displayed here -->
-                        </div>
+                        <div id="new-image-previews" class="d-flex flex-wrap gap-2 mt-2"></div>
 
                         @error('new_images')
                             <div class="text-danger mt-1">{{ $message }}</div>
@@ -133,28 +143,27 @@
                         @enderror
                     </div>
 
-                    <div class="mb-4">
+                    <div class="mb-3">
                         <label class="form-label">Certificate</label>
-                        <div class="d-flex align-items-center">
-                            <button type="button" class="btn btn-sm btn-outline-success"
+                        <div class="input-group">
+                            <button type="button" class="btn btn-outline-success"
                                 onclick="document.getElementById('certificate').click()">
-                                <i class="fas fa-plus"></i> Certificate
+                                <i class="fas fa-file-upload me-2"></i> Upload Certificate
                             </button>
                             <input type="file" id="certificate" name="certificate" class="d-none" accept=".pdf,.doc,.docx"
                                 onchange="updateCertificateLabel(this)">
-                            <span id="certificate-label" class="ms-2">
+                            <span class="input-group-text flex-grow-1" id="certificate-label">
                                 @if($product->certificate)
-                                    {{ basename($product->certificate) }}
+                                    {{ $product->certificate->name }}
                                 @endif
                             </span>
                         </div>
                         @if($product->certificate)
-                            <div class="form-check mt-2">
-                                <input class="form-check-input" type="checkbox" name="delete_certificate"
-                                    id="delete-certificate">
-                                <label class="form-check-label" for="delete-certificate">
-                                    Delete existing certificate
-                                </label>
+                            <div class="mt-2">
+                                <a href="{{ Storage::url($product->certificate->certificate_path) }}" target="_blank"
+                                    class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-file-download me-1"></i> Download Current Certificate
+                                </a>
                             </div>
                         @endif
                         @error('certificate')
@@ -162,14 +171,16 @@
                         @enderror
                     </div>
 
-                    <div class="row">
-                        <div class="col-md-6">
-                            <button type="submit" class="btn btn-success w-100">Publish</button>
+                    <div class="mb-3">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="is_active" name="is_active" value="1" {{ $product->is_active ? 'checked' : '' }}>
+                            <label class="form-check-label" for="is_active">Active</label>
                         </div>
-                        <div class="col-md-6">
-                            <a href="{{ route('company.products.index') }}"
-                                class="btn btn-outline-secondary w-100">Cancel</a>
-                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2 mt-4">
+                        <a href="{{ route('company.products.index') }}" class="btn btn-outline-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-success">Update Product</button>
                     </div>
                 </form>
             </div>
@@ -199,18 +210,7 @@
     </div>
 
     @push('styles')
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-        <style>
-            .btn-success {
-                background-color: #4CAF50;
-                border-color: #4CAF50;
-            }
-
-            .btn-success:hover {
-                background-color: #3e8e41;
-                border-color: #3e8e41;
-            }
-        </style>
+        @include('layouts.company-styles')
     @endpush
 
     @push('scripts')

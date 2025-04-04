@@ -5,11 +5,24 @@
 
 @section('content')
     <div class="container py-4">
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="badge bg-success">Products</span>
+                        <h1 class="mt-2 mb-0">{{ $company->company_name }}</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        @include('layouts.company-nav')
+
+        <!-- Create Product Form -->
         <div class="card shadow-sm">
             <div class="card-body">
-                <h3 class="mb-4">JobiJob</h3>
-
-                <h4 class="mb-4">Publish product</h4>
+                <h4 class="mb-4">Publish Product</h4>
 
                 @if(session('error'))
                     <div class="alert alert-danger">
@@ -101,43 +114,39 @@
                                 onclick="document.getElementById('product_images').click()">
                                 <i class="fas fa-plus"></i> Product pictures
                             </button>
-                            <input type="file" id="product_images" name="images[]" multiple class="d-none" accept="image/*"
+                            <input type="file" id="product_images" name="product_images[]" multiple class="d-none" accept="image/*"
                                 onchange="previewImages(this)">
                         </div>
                         <div id="image-previews" class="d-flex flex-wrap gap-2 mt-2">
                             <!-- Image previews will be displayed here -->
                         </div>
-                        @error('images')
+                        @error('product_images')
                             <div class="text-danger mt-1">{{ $message }}</div>
                         @enderror
-                        @error('images.*')
+                        @error('product_images.*')
                             <div class="text-danger mt-1">{{ $message }}</div>
                         @enderror
                     </div>
 
-                    <div class="mb-4">
+                    <div class="mb-3">
                         <label class="form-label">Certificate</label>
-                        <div class="d-flex align-items-center">
-                            <button type="button" class="btn btn-sm btn-outline-success"
+                        <div class="input-group">
+                            <button type="button" class="btn btn-outline-success"
                                 onclick="document.getElementById('certificate').click()">
-                                <i class="fas fa-plus"></i> Certificate
+                                <i class="fas fa-file-upload me-2"></i> Upload Certificate
                             </button>
                             <input type="file" id="certificate" name="certificate" class="d-none" accept=".pdf,.doc,.docx"
                                 onchange="updateCertificateLabel(this)">
-                            <span id="certificate-label" class="ms-2"></span>
+                            <span class="input-group-text flex-grow-1" id="certificate-label"></span>
                         </div>
                         @error('certificate')
                             <div class="text-danger mt-1">{{ $message }}</div>
                         @enderror
                     </div>
 
-                    <div class="row">
-                        <div class="col-md-6">
-                            <button type="submit" class="btn btn-success w-100">Publish</button>
-                        </div>
-                        <div class="col-md-6">
-                            <a href="{{ route('company.products.index') }}" class="btn btn-outline-secondary w-100">Cancel</a>
-                        </div>
+                    <div class="d-flex justify-content-end gap-2 mt-4">
+                        <a href="{{ route('company.products.index') }}" class="btn btn-outline-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-success">Publish Product</button>
                     </div>
                 </form>
             </div>
@@ -167,18 +176,7 @@
     </div>
 
     @push('styles')
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-        <style>
-            .btn-success {
-                background-color: #4CAF50;
-                border-color: #4CAF50;
-            }
-
-            .btn-success:hover {
-                background-color: #3e8e41;
-                border-color: #3e8e41;
-            }
-        </style>
+        @include('layouts.company-styles')
     @endpush
 
     @push('scripts')

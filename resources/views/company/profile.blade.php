@@ -17,32 +17,7 @@
         </div>
 
         <!-- Navigation Tabs -->
-        <div class="card shadow-sm mb-4">
-            <div class="card-body">
-                <ul class="nav nav-pills nav-fill">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('company.products.index') }}">
-                            <i class="fas fa-box me-2"></i> Products
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('company.orders') }}">
-                            <i class="fas fa-shopping-cart me-2"></i> Orders
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <i class="fas fa-coins me-2"></i> Credits
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="{{ route('company.profile') }}">
-                            <i class="fas fa-user me-2"></i> Profile
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
+        @include('layouts.company-nav')
 
         <!-- Profile Form -->
         <div class="card shadow-sm">

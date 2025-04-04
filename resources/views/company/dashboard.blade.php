@@ -9,7 +9,7 @@
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <span class="badge bg-success">Jobs Published</span>
+                        <span class="badge bg-success">Dashboard</span>
                         <h1 class="mt-2 mb-0">{{ $company->company_name }}</h1>
                     </div>
                 </div>
@@ -17,144 +17,185 @@
         </div>
 
         <!-- Navigation Tabs -->
-        <div class="card shadow-sm mb-4">
-            <div class="card-body">
-                <ul class="nav nav-pills nav-fill">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="{{ route('company.products.index') }}">
-                            <i class="fas fa-box me-2"></i> Products
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('company.orders.index') }}">
-                            <i class="fas fa-shopping-cart me-2"></i> Orders
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('company.credits.index') }}">
-                            <i class="fas fa-coins me-2"></i> Credits
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('company.profile') }}">
-                            <i class="fas fa-user me-2"></i> Profile
-                        </a>
-                    </li>
-                </ul>
+        @include('layouts.company-nav')
+
+        <!-- Dashboard Content -->
+        <div class="row">
+            <!-- Stats Cards -->
+            <div class="col-md-3 mb-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-muted mb-1">Total Products</h6>
+                                <h3 class="mb-0">{{ $totalProducts }}</h3>
+                            </div>
+                            <div class="bg-light rounded-circle p-3">
+                                <i class="fas fa-box fa-2x text-success"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
 
-        <!-- Search and Upload Section -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <div class="input-group" style="max-width: 500px;">
-                <span class="input-group-text">Section 2</span>
-                <input type="text" class="form-control" placeholder="Search..." aria-label="Search">
+            <div class="col-md-3 mb-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-muted mb-1">Total Orders</h6>
+                                <h3 class="mb-0">{{ $totalOrders }}</h3>
+                            </div>
+                            <div class="bg-light rounded-circle p-3">
+                                <i class="fas fa-shopping-cart fa-2x text-primary"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <a href="{{ route('company.products.create') }}" class="btn btn-success">
-                <i class="fas fa-plus me-2"></i> Upload product
-            </a>
-        </div>
 
-        <!-- Products Grid -->
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
-            @foreach($products as $product)
-                <div class="col">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ $product->name }}</h5>
-                            <p class="card-text text-muted">
-                                @if($product->categories->count() > 0)
-                                    {{ $product->categories->first()->name }}
-                                @else
-                                    Uncategorized
-                                @endif
-                            </p>
-                            <div class="d-flex justify-content-between mt-3">
-                                <a href="{{ route('company.products.edit', $product->id) }}" class="btn btn-success">Edit</a>
-                                <a href="{{ route('company.products.show', $product->id) }}"
-                                    class="btn btn-secondary">Details</a>
+            <div class="col-md-3 mb-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-muted mb-1">Total Revenue</h6>
+                                <h3 class="mb-0">${{ number_format($totalSales, 2) }}</h3>
+                            </div>
+                            <div class="bg-light rounded-circle p-3">
+                                <i class="fas fa-dollar-sign fa-2x text-success"></i>
                             </div>
                         </div>
                     </div>
                 </div>
-            @endforeach
+            </div>
 
-            <!-- Example products if no products exist -->
-            @if(count($products) == 0)
-                <div class="col">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title">Rundofase</h5>
-                            <p class="card-text text-muted">Syracuse, Connecticut</p>
-                            <div class="d-flex justify-content-between mt-3">
-                                <a href="{{ route('company.products.create') }}" class="btn btn-success">Create</a>
-                                <button class="btn btn-secondary" disabled>Details</button>
+            <div class="col-md-3 mb-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-muted mb-1">Credits</h6>
+                                <h3 class="mb-0">{{ number_format($totalCredits, 2) }}</h3>
+                            </div>
+                            <div class="bg-light rounded-circle p-3">
+                                <i class="fas fa-coins fa-2x text-warning"></i>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title">Wade Warren</h5>
-                            <p class="card-text text-muted">Lafayette, California</p>
-                            <div class="d-flex justify-content-between mt-3">
-                                <a href="{{ route('company.products.create') }}" class="btn btn-success">Create</a>
-                                <button class="btn btn-secondary" disabled>Details</button>
-                            </div>
+            </div>
+
+            <!-- Recent Orders -->
+            <div class="col-md-8 mb-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-header bg-white">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">Recent Orders</h5>
+                            <a href="{{ route('company.orders.index') }}" class="btn btn-sm btn-outline-primary">View
+                                All</a>
                         </div>
                     </div>
-                </div>
-                <div class="col">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title">Hooli</h5>
-                            <p class="card-text text-muted">Kent, Utah</p>
-                            <div class="d-flex justify-content-between mt-3">
-                                <a href="{{ route('company.products.create') }}" class="btn btn-success">Create</a>
-                                <button class="btn btn-secondary" disabled>Details</button>
+                    <div class="card-body">
+                        @if($recentOrders->isEmpty())
+                            <div class="text-center py-4">
+                                <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
+                                <p>No orders yet</p>
                             </div>
-                        </div>
+                        @else
+                                    <div class="table-responsive">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Order ID</th>
+                                                    <th>Customer</th>
+                                                    <th>Date</th>
+                                                    <th>Total</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach($recentOrders as $order)
+                                                                        <tr>
+                                                                            <td>#{{ $order->id }}</td>
+                                                                            <td>{{ $order->user->name }}</td>
+                                                                            <td>{{ $order->created_at->format('M d, Y') }}</td>
+                                                                            <td>${{ number_format($order->total, 2) }}</td>
+                                                                            <td>
+                                                                                <span class="badge bg-{{ 
+                                                                                                                                        $order->status == 'pending' ? 'warning' :
+                                                    ($order->status == 'processing' ? 'info' :
+                                                        ($order->status == 'shipped' ? 'primary' :
+                                                            ($order->status == 'delivered' ? 'success' : 'danger'))) 
+                                                                                                                                    }}">
+                                                                                    {{ ucfirst($order->status) }}
+                                                                                </span>
+                                                                            </td>
+                                                                        </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                        @endif
                     </div>
                 </div>
-                <div class="col">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title">Gekko & Co</h5>
-                            <p class="card-text text-muted">Great Falls, Maryland</p>
-                            <div class="d-flex justify-content-between mt-3">
-                                <a href="{{ route('company.products.create') }}" class="btn btn-success">Create</a>
-                                <button class="btn btn-secondary" disabled>Details</button>
-                            </div>
+            </div>
+
+            <!-- Popular Products -->
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-header bg-white">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">Popular Products</h5>
+                            <a href="{{ route('company.products.index') }}" class="btn btn-sm btn-outline-primary">View
+                                All</a>
                         </div>
                     </div>
+                    <div class="card-body">
+                        @if($popularProducts->isEmpty())
+                            <div class="text-center py-4">
+                                <i class="fas fa-box fa-3x text-muted mb-3"></i>
+                                <p>No products yet</p>
+                            </div>
+                        @else
+                                    <ul class="list-group list-group-flush">
+                                        @foreach($popularProducts as $product)
+                                                        <li class="list-group-item px-0">
+                                                            <div class="d-flex align-items-center">
+                                                                <div class="flex-shrink-0">
+                                                                    @if($product->images->count() > 0)
+                                                                                                @php
+                                                                                                    $primaryImage = $product->images->firstWhere('is_primary', true) ?? $product->images->first();
+                                                                                                @endphp
+                                                                                                <img src="{{ asset('storage/' . $primaryImage->image_path) }}"
+                                                                                                    alt="{{ $product->name }}" class="rounded" width="50" height="50"
+                                                                                                    style="object-fit: cover;">
+                                                                    @else
+                                                                        <div class="bg-light rounded d-flex align-items-center justify-content-center"
+                                                                            style="width: 50px; height: 50px;">
+                                                                            <i class="fas fa-image text-muted"></i>
+                                                                        </div>
+                                                                    @endif
+                                                                </div>
+                                                                <div class="flex-grow-1 ms-3">
+                                                                    <h6 class="mb-0">{{ $product->name }}</h6>
+                                                                    <small class="text-muted">{{ $product->orders_count }} orders</small>
+                                                                </div>
+                                                                <div class="flex-shrink-0">
+                                                                    <span class="badge bg-success">${{ number_format($product->price, 2) }}</span>
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                        @endforeach
+                                    </ul>
+                        @endif
+                    </div>
                 </div>
-            @endif
+            </div>
         </div>
     </div>
 
-    <!-- Add Font Awesome for icons -->
     @push('styles')
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-        <style>
-            .nav-pills .nav-link.active {
-                background-color: #4CAF50;
-                border-bottom: 3px solid #4CAF50;
-            }
-
-            .nav-pills .nav-link {
-                color: #495057;
-            }
-
-            .btn-success {
-                background-color: #4CAF50;
-                border-color: #4CAF50;
-            }
-
-            .btn-success:hover {
-                background-color: #3e8e41;
-                border-color: #3e8e41;
-            }
-        </style>
+        @include('layouts.company-styles')
     @endpush
 @endsection
