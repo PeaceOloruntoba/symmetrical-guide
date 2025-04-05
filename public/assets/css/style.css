@@ -1,0 +1,254 @@
+/* fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+*{
+    font-family: "Poppins", sans-serif;
+}
+
+.poppins-thin {
+    font-family: "Poppins", sans-serif;
+    font-weight: 100;
+    font-style: normal;
+  }
+  
+  .poppins-extralight {
+    font-family: "Poppins", sans-serif;
+    font-weight: 200;
+    font-style: normal;
+  }
+  
+  .poppins-light {
+    font-family: "Poppins", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+  }
+  
+  .poppins-regular {
+    font-family: "Poppins", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+  }
+  
+  .poppins-medium {
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+    font-style: normal;
+  }
+  
+  .poppins-semibold {
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    font-style: normal;
+  }
+  
+  .poppins-bold {
+    font-family: "Poppins", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+  }
+  
+  .poppins-extrabold {
+    font-family: "Poppins", sans-serif;
+    font-weight: 800;
+    font-style: normal;
+  }
+  
+  .poppins-black {
+    font-family: "Poppins", sans-serif;
+    font-weight: 900;
+    font-style: normal;
+  }
+  
+  .poppins-thin-italic {
+    font-family: "Poppins", sans-serif;
+    font-weight: 100;
+    font-style: italic;
+  }
+  
+  .poppins-extralight-italic {
+    font-family: "Poppins", sans-serif;
+    font-weight: 200;
+    font-style: italic;
+  }
+  
+  .poppins-light-italic {
+    font-family: "Poppins", sans-serif;
+    font-weight: 300;
+    font-style: italic;
+  }
+  
+  .poppins-regular-italic {
+    font-family: "Poppins", sans-serif;
+    font-weight: 400;
+    font-style: italic;
+  }
+  
+  .poppins-medium-italic {
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+    font-style: italic;
+  }
+  
+  .poppins-semibold-italic {
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    font-style: italic;
+  }
+  
+  .poppins-bold-italic {
+    font-family: "Poppins", sans-serif;
+    font-weight: 700;
+    font-style: italic;
+  }
+  
+  .poppins-extrabold-italic {
+    font-family: "Poppins", sans-serif;
+    font-weight: 800;
+    font-style: italic;
+  }
+  
+  .poppins-black-italic {
+    font-family: "Poppins", sans-serif;
+    font-weight: 900;
+    font-style: italic;
+  }
+
+  .card{
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px; 
+    border: none !important;
+  }
+  
+  /* index */
+  .index_title{
+    font-size: 80px !important;
+    font-weight: 700 !important;
+    color: #31572C !important;
+  }
+
+  .index_span{
+    color: #5BB85C !important;
+    font-size: 24px !important;
+    text-decoration: none !important;
+  }
+
+  .index_link{
+    color: #757575 !important;
+    font-size: 24px !important;
+    text-decoration: none !important;
+  }
+
+  #indexLoginInputEmail,  #indexLoginInputPassword{
+    width: 845px !important;
+    height: 102px !important;
+    font-size: 20px !important;
+    background-color: #F8F9FA !important;
+  }
+
+  #indexLoginInputEmail::placeholder,  #indexLoginInputPassword::placeholder{
+    color: #6C757D !important;
+    font-size: 20px !important;
+  }
+
+  .index_submit{
+    width: 845px !important;
+    height: 102px !important;
+    font-size: 20px !important;
+    color: white !important;
+    background-color: #5BB85C !important;
+  }
+
+  #index_forgetPasswordLink{
+    text-decoration: none !important;
+    color: #5BB85C !important;
+    font-weight: 600 !important;
+    font-size: 24px !important;
+  }
+
+  .form-check-label{
+    color: #757575 !important;
+    font-weight: 600 !important;
+    font-size: 24px !important;
+  }
+
+  input[type="checkbox"]{
+    font: inherit;
+    color: currentColor;
+    width: 27px !important;
+    height: 27px !important;
+    border: 0.15em solid currentColor;
+    border-radius: 0.15em;
+    transform: translateY(-0.075em);
+  }
+
+  /* register */
+  .index_halfinput{
+    width: 409px !important;
+    height: 102px !important;
+    font-size: 20px !important;
+    background-color: #F8F9FA !important;
+  }
+
+  .index_halfinput::placeholder{
+    color: #6C757D !important;
+    font-size: 20px !important;
+  }
+
+  #index_LoginCompanyName{
+    width: 845px !important;
+    height: 102px !important;
+    font-size: 20px !important;
+    background-color: #F8F9FA !important;
+  }
+
+  #index_LoginCompanyName::placeholder{
+    color: #6C757D !important;
+    font-size: 20px !important;
+  }
+
+  #indexResetPassword,  #indexResetPasswordConfirm{
+    width: 845px !important;
+    height: 102px !important;
+    font-size: 20px !important;
+    background-color: #F8F9FA !important;
+  }
+
+  #indexResetPassword::placeholder,  #indexResetPasswordConfirm::placeholder{
+    color: #6C757D !important;
+    font-size: 20px !important;
+  }
+
+  /* credit */
+  #index_credit_subtitle{
+    font-size: 32px !important;
+    font-weight: 700;
+  }
+
+  .index_credit_list{
+    font-size: 20px !important;
+  }
+
+  #index_credit_title{
+    color: #4F772D !important;
+    font-size: 48px !important;
+    font-weight: 600;
+  }
+
+  #index_credit_title>span{
+    color: #4F772D !important;
+    font-size: 20px !important;
+    font-weight: 500;
+  }
+  /* 
+  .index_
+  .index_
+  .index_
+  .index_
+  .index_
+  .index_
+  .index_
+  .index_
+  .index_
+  .index_
+  .index_
+  .index_
+  .index_ */
