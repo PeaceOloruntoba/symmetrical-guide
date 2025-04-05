@@ -227,7 +227,22 @@ class CompanyController extends Controller
      */
     public function purchaseCredits()
     {
-        $company = Auth::user()->company;
-        return view('company.credits.purchase', compact('company'));
+        $user = Auth::user();
+        $company = $user->company;
+
+        // Calculate total credits
+        $totalCredits = Credit::where('user_id', $user->id)
+            ->where('type', 'purchase')
+            ->sum('amount') -
+            Credit::where('user_id', $user->id)
+                ->where('type', 'usage')
+                ->sum('amount');
+
+        // Fetch available plans from the database
+        $creditPackages = \App\Models\Plan::where('is_active', true)
+            ->orderBy('price')
+            ->get();
+
+        return view('company.credits.purchase', compact('company', 'creditPackages', 'totalCredits'));
     }
 }
