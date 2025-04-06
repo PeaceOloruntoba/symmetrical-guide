@@ -97,7 +97,12 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // Admin routes
-    Route::prefix('admin')->middleware(['role:admin'])->group(function () {
-        Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-    });
+Route::prefix('admin')->middleware(['role:admin'])->group(function () {
+    Route::get('/dashboard', [AdminController::class, 'dashboard']);
+    Route::get('/companies', [AdminController::class, 'listCompanies']);
+    Route::get('/companies/{company}', [AdminController::class, 'showCompany']);
+    Route::get('/users', [AdminController::class, 'listUsers']);
+    Route::get('/users/{user}', [AdminController::class, 'showUser']);
+});
+
 });
