@@ -33,8 +33,10 @@ class UserController extends Controller
     public function showCategory(Category $category): View
     {
         $subcategories = Category::where('parent_id', $category->id)->with('products')->get();
+        $products = Product::where('category_id', $category->id)->paginate(12); // Fetch products directly in this category
         $categories = Category::where('parent_id', null)->get(); // Fetch main categories for the navbar
-        return view('categories.show', compact('category', 'subcategories', 'categories'));
+
+        return view('categories.show', compact('category', 'subcategories', 'products', 'categories'));
     }
 
     /**
@@ -58,7 +60,7 @@ class UserController extends Controller
     /**
      * Display search results for products, including those under matching subcategories.
      */
-public function searchProducts(Request $request): View
+    public function searchProducts(Request $request): View
     {
         $query = $request->input('search');
 
