@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Product;
-use App\Models\Subcategory;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -15,38 +14,37 @@ class UserController extends Controller
      */
     public function index(): View
     {
-        $categories = Category::all();
+        $categories = Category::where('parent_id', null)->get(); // Only main categories
         return view('welcome', compact('categories'));
     }
 
     /**
-     * Display a listing of all categories.
+     * Display a listing of all main categories.
      */
     public function categoriesIndex(): View
     {
-        $categories = Category::all();
+        $categories = Category::where('parent_id', null)->get(); // Only main categories
         return view('categories.index', compact('categories'));
     }
 
     /**
-     * Display the subcategories for a specific category.
+     * Display subcategories and some products for a specific category.
      */
-public function showCategory(Category $category): View
+    public function showCategory(Category $category): View
     {
-        $subcategories = Category::where('parent_id', $category->id)->get();
-        // If you also want to display products directly under the main category (level 0)
-        $products = Product::where('category_id', $category->id)->paginate(12);
-
-        return view('subcategories.index', compact('subcategories', 'category', 'products'));
+        $subcategories = Category::where('parent_id', $category->id)->with('products')->get();
+        return view('categories.show', compact('category', 'subcategories'));
     }
 
     /**
-     * Display the products for a specific subcategory.
+     * Display all products for a specific subcategory.
      */
     public function showSubcategory(Category $subcategory): View
     {
         $products = Product::where('category_id', $subcategory->id)->paginate(12);
-        return view('products.index', compact('products', 'subcategory'));
+        $categories = Category::where('parent_id', null)->get();
+
+        return view('products.index', compact('products', 'subcategory', 'categories'));
     }
 
     /**
@@ -60,7 +58,7 @@ public function showCategory(Category $category): View
     /**
      * Display search results for products.
      */
-public function searchProducts(Request $request): View
+    public function searchProducts(Request $request): View
     {
         $query = $request->input('search');
         $products = Product::where('name', 'like', "%{$query}%")
@@ -68,9 +66,6 @@ public function searchProducts(Request $request): View
                             ->paginate(12)
                             ->withQueryString();
 
-        $categories = Category::where('name', 'like', "%{$query}%")->get();
-        $subcategories = Subcategory::where('name', 'like', "%{$query}%")->get();
-
-        return view('products.index', compact('products', 'query', 'categories', 'subcategories'));
+        return view('products.index', compact('products', 'query'));
     }
 }
