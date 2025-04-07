@@ -37,9 +37,9 @@ public function showCategory(Category $category): View
     $categories = Category::where('parent_id', null)->get();
 
     Log::info('Category ID: ' . $category->id);
-    Log::info('Subcategories: ' . $subcategories);
-    Log::info('Products Count (for main category - might be 0): ' . $subcategories->flatMap(function ($sub) { return $sub->products; })->count()); // Logging total products across subcategories
-    Log::info('First Product (from first subcategory, if any): ' . $subcategories->first()->products->first());
+    Log::info('Subcategories with Products: ' . $subcategories->map(function ($sub) {
+        return ['id' => $sub->id, 'name' => $sub->name, 'products_count' => $sub->products->count()];
+    }));
 
     return view('categories.show', compact('category', 'subcategories', 'categories'));
 }
