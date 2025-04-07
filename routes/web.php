@@ -26,8 +26,8 @@ use App\Http\Controllers\CreditController;
 Route::get('/', [UserController::class, 'index'])->name('home');
 Route::get('/categories', [UserController::class, 'categoriesIndex'])->name('categories.index');
 Route::get('/categories/{category}', [UserController::class, 'showCategory'])->name('categories.show');
-Route::get('/subcategories/{subcategory}', [UserController::class, 'showSubcategory'])->name('subcategories.show'); // We'll need this later
-Route::get('/products/{product}', [UserController::class, 'showProduct'])->name('products.show'); // For product details
+Route::get('/subcategories/{subcategory}', [UserController::class, 'showSubcategory'])->name('subcategories.show');
+Route::get('/products/{product}', [UserController::class, 'showProduct'])->name('products.show');
 Route::get('/search', [UserController::class, 'searchProducts'])->name('search.products');
 
 // Auth routes group
