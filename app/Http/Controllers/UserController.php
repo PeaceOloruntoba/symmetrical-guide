@@ -34,7 +34,6 @@ class UserController extends Controller
     {
         $subcategories = Category::where('parent_id', $category->id)->with('products')->get();
         $categories = Category::where('parent_id', null)->get(); // Fetch main categories for the navbar
-
         return view('categories.show', compact('category', 'subcategories', 'categories'));
     }
 
@@ -45,7 +44,6 @@ class UserController extends Controller
     {
         $products = Product::where('category_id', $subcategory->id)->paginate(12);
         $categories = Category::where('parent_id', null)->get(); // Fetch main categories for the navbar
-
         return view('products.index', compact('products', 'subcategory', 'categories'));
     }
 
@@ -58,16 +56,27 @@ class UserController extends Controller
     }
 
     /**
-     * Display search results for products.
+     * Display search results for products, including those under matching subcategories.
      */
     public function searchProducts(Request $request): View
     {
         $query = $request->input('search');
+
+        // Find subcategories whose names match the search query
+        $matchingSubcategories = Category::where('name', 'like', "%{$query}%")
+                                        ->whereNotNull('parent_id') // Ensure it's a subcategory
+                                        ->pluck('id');
+
+        // Find products whose names or descriptions match the query,
+        // OR whose category_id matches one of the matching subcategories
         $products = Product::where('name', 'like', "%{$query}%")
                             ->orWhere('description', 'like', "%{$query}%")
+                            ->orWhereIn('category_id', $matchingSubcategories)
                             ->paginate(12)
                             ->withQueryString();
 
-        return view('products.index', compact('products', 'query'));
+        $categories = Category::where('parent_id', null)->get();
+
+        return view('products.index', compact('products', 'query', 'categories'));
     }
 }
