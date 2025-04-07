@@ -24,6 +24,7 @@ class Plan extends Model
         'has_product_page',
         'has_wallet_system',
         'is_active',
+        'is_popular',
     ];
 
     /**
@@ -38,6 +39,7 @@ class Plan extends Model
         'has_product_page' => 'boolean',
         'has_wallet_system' => 'boolean',
         'is_active' => 'boolean',
+        'is_popular' => 'boolean',
     ];
 
     /**

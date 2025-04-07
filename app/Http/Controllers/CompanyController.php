@@ -23,6 +23,7 @@ class CompanyController extends Controller
     public function dashboard()
     {
         $company = Auth::user()->company;
+        $activeSubscription = Auth::user()->activeSubscription();
 
         // Get statistics
         $totalProducts = $company->products()->count();
@@ -41,9 +42,6 @@ class CompanyController extends Controller
             $query->where('status', 'delivered');
         })->sum(\DB::raw('price * quantity'));
 
-        // Get company credit balance - assuming there's a credit_balance column in the companies table
-        $totalCredits = $company->credit_balance ?? 0;
-
         // Get recent products
         $recentProducts = $company->products()->latest()->take(5)->get();
 
@@ -61,17 +59,17 @@ class CompanyController extends Controller
         // Get recent orders
         $recentOrders = Order::whereHas('items.product', function ($query) use ($company) {
             $query->where('company_id', $company->id);
-        })->with(['user', 'items.product'])->latest()->take(5)->get();
+        })->latest()->take(5)->get();
 
         return view('company.dashboard', compact(
             'company',
             'totalProducts',
             'totalOrders',
             'totalSales',
-            'totalCredits',
             'recentProducts',
             'popularProducts',
-            'recentOrders'
+            'recentOrders',
+            'activeSubscription'
         ));
     }
 

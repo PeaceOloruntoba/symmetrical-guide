@@ -9,7 +9,7 @@
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <span class="badge bg-success">Credits</span>
+                        <span class="badge bg-success">Credits & Subscription</span>
                         <h1 class="mt-2 mb-0">{{ $company->company_name }}</h1>
                     </div>
                 </div>
@@ -19,18 +19,58 @@
         <!-- Navigation Tabs -->
         @include('layouts.company-nav')
 
+        @if(session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        <!-- Subscription Status Card -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4>Subscription Status</h4>
+                        @php
+                            $activeSubscription = Auth::user()->activeSubscription();
+                        @endphp
+
+                        @if($activeSubscription)
+                            <div class="d-flex align-items-center">
+                                <span class="badge bg-success me-2">Active</span>
+                                <h5 class="mb-0">{{ $activeSubscription->plan->name }}</h5>
+                            </div>
+                            <p class="text-muted mt-2">
+                                Expires:
+                                {{ $activeSubscription->ends_at ? $activeSubscription->ends_at->format('M d, Y') : 'Never' }}
+                            </p>
+                        @else
+                            <div class="d-flex align-items-center">
+                                <span class="badge bg-danger me-2">Inactive</span>
+                                <p class="mb-0">No active subscription</p>
+                            </div>
+                        @endif
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <a href="{{ route('company.credits.purchase') }}" class="btn btn-success mt-3">
+                            @if($activeSubscription)
+                                <i class="fas fa-sync-alt me-2"></i> Manage Subscription
+                            @else
+                                <i class="fas fa-plus me-2"></i> Subscribe Now
+                            @endif
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Credit Balance Card -->
         <div class="card shadow-sm mb-4">
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-6">
-                        <h4>Current Balance</h4>
+                        <h4>Current Credit Balance</h4>
                         <h2 class="text-success">{{ number_format($totalCredits, 2) }} Credits</h2>
-                    </div>
-                    <div class="col-md-6 text-md-end">
-                        <a href="{{ route('company.credits.purchase') }}" class="btn btn-success mt-3">
-                            <i class="fas fa-plus me-2"></i> Purchase Credits
-                        </a>
                     </div>
                 </div>
             </div>

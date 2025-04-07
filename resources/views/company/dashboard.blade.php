@@ -75,11 +75,11 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
-                                <h6 class="text-muted mb-1">Credits</h6>
-                                <h3 class="mb-0">{{ number_format($totalCredits, 2) }}</h3>
+                                <h6 class="text-muted mb-1">Subscription</h6>
+                                <h3 class="mb-0">{{ $activeSubscription->plan->name }}</h3>
                             </div>
                             <div class="bg-light rounded-circle p-3">
-                                <i class="fas fa-coins fa-2x text-warning"></i>
+                                <i class="fas fa-credit-card fa-2x text-warning"></i>
                             </div>
                         </div>
                     </div>
@@ -122,12 +122,13 @@
                                                                             <td>{{ $order->created_at->format('M d, Y') }}</td>
                                                                             <td>${{ number_format($order->total, 2) }}</td>
                                                                             <td>
-                                                                                <span class="badge bg-{{
-                                                                                                                                        $order->status == 'pending' ? 'warning' :
+                                                                                <span
+                                                                                    class="badge bg-{{
+                                                    $order->status == 'pending' ? 'warning' :
                                                     ($order->status == 'processing' ? 'info' :
                                                         ($order->status == 'shipped' ? 'primary' :
                                                             ($order->status == 'delivered' ? 'success' : 'danger')))
-                                                                                                                                    }}">
+                                                                                                                                                                                                                    }}">
                                                                                     {{ ucfirst($order->status) }}
                                                                                 </span>
                                                                             </td>

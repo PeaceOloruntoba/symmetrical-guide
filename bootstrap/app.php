@@ -8,6 +8,7 @@ use Spatie\Permission\Middleware\PermissionMiddleware;
 use Spatie\Permission\Middleware\RoleOrPermissionMiddleware;
 use App\Http\Middleware\CheckProductOwnership;
 use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\CheckSubscription;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -22,6 +23,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'role_or_permission' => RoleOrPermissionMiddleware::class,
             'check.product.owner' => CheckProductOwnership::class,
             'admin' => AdminMiddleware::class,
+            'subscription' => CheckSubscription::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

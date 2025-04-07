@@ -9,7 +9,7 @@
         <div class="card-body">
             <div class="d-flex justify-content-between align-items-center">
                 <div>
-                    <span class="badge bg-success">Purchase Credits</span>
+                    <span class="badge bg-success">Subscription Plans</span>
                     <h1 class="mt-2 mb-0">{{ $company->company_name }}</h1>
                 </div>
                 <a href="{{ route('company.credits.index') }}" class="btn btn-outline-secondary">
@@ -22,20 +22,20 @@
     <!-- Navigation Tabs -->
     @include('layouts.company-nav')
 
-    <!-- Purchase Credits Form -->
+    @if(session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
+
+    <!-- Subscription Plans -->
     <div class="row">
         <div class="col-md-8">
             <div class="card shadow-sm mb-4">
                 <div class="card-header bg-white">
-                    <h5 class="mb-0">Select Credit Package</h5>
+                    <h5 class="mb-0">Select Subscription Plan</h5>
                 </div>
                 <div class="card-body">
-                    @if(session('error'))
-                        <div class="alert alert-danger">
-                            {{ session('error') }}
-                        </div>
-                    @endif
-
                     <form method="POST" action="{{ route('company.credits.process') }}" id="payment-form">
                         @csrf
                         
@@ -53,7 +53,7 @@
                                                     <label class="form-check-label w-100" for="package-{{ $package->id }}">
                                                         <h5 class="mb-1">{{ $package->name }}</h5>
                                                         <p class="mb-1">{{ $package->credits }} Credits</p>
-                                                        <h4 class="text-success mb-0">${{ number_format($package->price, 2) }}</h4>
+                                                        <h4 class="text-success mb-0">${{ number_format($package->price, 2) }}/month</h4>
                                                         @if($package->is_popular)
                                                             <span class="badge bg-warning mt-2">Popular</span>
                                                         @endif
@@ -82,7 +82,7 @@
 
                         <div class="d-grid">
                             <button type="submit" class="btn btn-success" id="submit-button">
-                                <i class="fas fa-credit-card me-2"></i> Purchase Credits
+                                <i class="fas fa-credit-card me-2"></i> Subscribe Now
                             </button>
                         </div>
                     </form>
@@ -103,21 +103,21 @@
 
             <div class="card shadow-sm">
                 <div class="card-header bg-white">
-                    <h5 class="mb-0">Why Purchase Credits?</h5>
+                    <h5 class="mb-0">Subscription Benefits</h5>
                 </div>
                 <div class="card-body">
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item px-0">
-                            <i class="fas fa-check-circle text-success me-2"></i> Promote your products
+                            <i class="fas fa-check-circle text-success me-2"></i> Access to dashboard
                         </li>
                         <li class="list-group-item px-0">
-                            <i class="fas fa-check-circle text-success me-2"></i> Boost visibility in search results
+                            <i class="fas fa-check-circle text-success me-2"></i> Manage your products
                         </li>
                         <li class="list-group-item px-0">
-                            <i class="fas fa-check-circle text-success me-2"></i> Feature products on the homepage
+                            <i class="fas fa-check-circle text-success me-2"></i> Track your orders
                         </li>
                         <li class="list-group-item px-0">
-                            <i class="fas fa-check-circle text-success me-2"></i> Access premium analytics
+                            <i class="fas fa-check-circle text-success me-2"></i> Receive credits for promotions
                         </li>
                         <li class="list-group-item px-0">
                             <i class="fas fa-check-circle text-success me-2"></i> Priority customer support
@@ -166,7 +166,7 @@
             
             // Re-enable the submit button
             submitButton.disabled = false;
-            submitButton.innerHTML = '<i class="fas fa-credit-card me-2"></i> Purchase Credits';
+            submitButton.innerHTML = '<i class="fas fa-credit-card me-2"></i> Subscribe Now';
         } else {
             // Send the token to your server
             stripeTokenHandler(token);

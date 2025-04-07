@@ -41,10 +41,21 @@ class Subscription extends Model
     }
 
     /**
-     * Get the plan for the subscription.
+     * Get the plan that the subscription is for.
      */
     public function plan()
     {
         return $this->belongsTo(Plan::class);
+    }
+
+    /**
+     * Determine if the subscription is active.
+     *
+     * @return bool
+     */
+    public function isActive()
+    {
+        return $this->status === 'active' &&
+            ($this->ends_at === null || $this->ends_at->isFuture());
     }
 }
