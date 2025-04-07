@@ -31,18 +31,21 @@ class UserController extends Controller
     /**
      * Display the subcategories for a specific category.
      */
-    public function showCategory(Category $category): View
+public function showCategory(Category $category): View
     {
-        $subcategories = $category->subcategories;
-        return view('products.index', compact('subcategories', 'category'));
+        $subcategories = Category::where('parent_id', $category->id)->get();
+        // If you also want to display products directly under the main category (level 0)
+        $products = Product::where('category_id', $category->id)->paginate(12);
+
+        return view('subcategories.index', compact('subcategories', 'category', 'products'));
     }
 
     /**
      * Display the products for a specific subcategory.
      */
-    public function showSubcategory(Subcategory $subcategory): View
+    public function showSubcategory(Category $subcategory): View
     {
-        $products = $subcategory->products()->paginate(12); // Adjust pagination as needed
+        $products = Product::where('category_id', $subcategory->id)->paginate(12);
         return view('products.index', compact('products', 'subcategory'));
     }
 
@@ -57,7 +60,7 @@ class UserController extends Controller
     /**
      * Display search results for products.
      */
-    public function searchProducts(Request $request): View
+public function searchProducts(Request $request): View
     {
         $query = $request->input('search');
         $products = Product::where('name', 'like', "%{$query}%")
@@ -65,6 +68,9 @@ class UserController extends Controller
                             ->paginate(12)
                             ->withQueryString();
 
-        return view('products.index', compact('products', 'query'));
+        $categories = Category::where('name', 'like', "%{$query}%")->get();
+        $subcategories = Subcategory::where('name', 'like', "%{$query}%")->get();
+
+        return view('products.index', compact('products', 'query', 'categories', 'subcategories'));
     }
 }
