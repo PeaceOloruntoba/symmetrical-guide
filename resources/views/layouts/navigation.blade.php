@@ -1,11 +1,11 @@
 <nav class="bg-white shadow py-3">
     <div class="w-full mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-8">
         <div class="flex items-center">
-            <a href="{{ route('home') }}" class="text-decoration-none text-green-500">{{ config('app.name', 'Germanware') }}</a>
+            <a href="{{ route('home') }}" class="text-decoration-none text-green-500 text-xl font-semibold">{{ config('app.name', 'Germanware') }}</a>
         </div>
 
         <div class="flex items-center w-full gap-8">
-            <form action="{{ route('search.products') }}" method="GET" class="relative rounded-full overflow-hidden border border-green-500 w-full">
+            <form action="{{ route('search.products') }}" method="GET" class="relative rounded-full overflow-hidden border border-green-500 w-full text-sm">
                 <input
                     type="search"
                     name="search"
