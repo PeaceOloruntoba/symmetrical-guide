@@ -17,10 +17,18 @@ use App\Http\Controllers\CreditController;
 |--------------------------------------------------------------------------
 */
 
-// Public routes
-Route::get('/', function () {
-    return view('welcome');
-})->name('welcome');
+// // Public routes
+// Route::get('/', function () {
+//     return view('welcome');
+// })->name('welcome');
+
+
+Route::get('/', [UserController::class, 'index'])->name('home');
+Route::get('/categories', [UserController::class, 'categoriesIndex'])->name('categories.index');
+Route::get('/categories/{category}', [UserController::class, 'showCategory'])->name('categories.show');
+Route::get('/subcategories/{subcategory}', [UserController::class, 'showSubcategory'])->name('subcategories.show'); // We'll need this later
+Route::get('/products/{product}', [UserController::class, 'showProduct'])->name('products.show'); // For product details
+Route::get('/search', [UserController::class, 'searchProducts'])->name('search.products');
 
 // Auth routes group
 Route::group(['namespace' => 'Auth'], function () {
