@@ -25,8 +25,8 @@
         @endif
 </head>
 
-<body class="bg-gray-100">
-    <div class="min-h-screen flex flex-col">
+<body class="bg-gray-200">
+    <div class="min-h-screen flex flex-col bg-gray-200">
         @include('layouts.navigation')
 
         <main class="container mx-auto py-6 flex-grow">
