@@ -91,9 +91,4 @@ class Product extends Model
     {
         return $this->hasManyThrough(Order::class, OrderItem::class, 'product_id', 'id', 'id', 'order_id');
     }
-
-    public function category()
-{
-    return $this->belongsTo(Category::class);
-}
 }
