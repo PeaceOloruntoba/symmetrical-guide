@@ -1,0 +1,98 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Category;
+use App\Models\Product;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\View\View;
+
+class UserController extends Controller
+{
+    /**
+     * Display the homepage with categories.
+     */
+    public function index(): View
+    {
+        $categories = Category::where('parent_id', null)->get(); // Only main categories
+        return view('welcome', compact('categories'));
+    }
+
+    /**
+     * Display a listing of all main categories.
+     */
+    public function categoriesIndex(): View
+    {
+        $categories = Category::where('parent_id', null)->get(); // Only main categories
+        return view('categories.index', compact('categories'));
+    }
+
+    /**
+     * Display subcategories and some products for a specific category.
+     */
+public function showCategory(Category $category): View
+{
+    // Fetch subcategories that belong to the current main category
+    $subcategories = Category::where('parent_id', $category->id)->get();
+
+    // Collect the names of these subcategories
+    $subcategoryNames = $subcategories->pluck('name');
+
+    // Fetch products where the 'category' column matches the name of any of these subcategories
+    $products = Product::whereIn('category', $subcategoryNames)->paginate(12);
+
+    // Fetch main categories for the navbar
+    $categories = Category::where('parent_id', null)->get();
+
+    Log::info('--- Category Details ---');
+    Log::info('Category ID: ' . $category->id);
+    Log::info('Subcategories: ' . $subcategories);
+    Log::info('Subcategory Names: ' . $subcategoryNames);
+    Log::info('Products Count: ' . $products->count());
+    Log::info('First Product: ' . $products->first());
+    Log::info('Products Collection: ' . $products);
+
+    return view('categories.show', compact('category', 'subcategories', 'products', 'categories'));
+}
+
+    /**
+     * Display all products for a specific subcategory.
+     */
+    public function showSubcategory(Category $subcategory): View
+    {
+        $products = Product::where('category_id', $subcategory->id)->paginate(12);
+        $categories = Category::where('parent_id', null)->get(); // Fetch main categories for the navbar
+        return view('products.index', compact('products', 'subcategory', 'categories'));
+    }
+
+    /**
+     * Display the details for a specific product.
+     */
+    public function showProduct(Product $product): View
+    {
+        return view('products.show', compact('product'));
+    }
+
+    /**
+     * Display search results for products.
+     */
+    public function searchProducts(Request $request): View
+    {
+        $query = $request->input('search');
+
+        $products = Product::where('name', 'like', "%{$query}%")
+                            ->orWhere('description', 'like', "%{$query}%")
+                            ->paginate(12)
+                            ->withQueryString();
+
+        $categories = Category::where('parent_id', null)->get();
+
+        // Log the columns of the first few products
+        foreach ($products->take(3) as $product) {
+            Log::info('Product Attributes:', $product->getAttributes());
+        }
+
+        return view('products.index', compact('products', 'query', 'categories'));
+    }
+}

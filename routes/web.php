@@ -17,10 +17,18 @@ use App\Http\Controllers\CreditController;
 |--------------------------------------------------------------------------
 */
 
+// Route::get('/', function () {
+    //     return view('welcome');
+    // })->name('welcome');
+
+
 // Public routes
-Route::get('/', function () {
-    return view('welcome');
-})->name('welcome');
+Route::get('/', [UserController::class, 'index'])->name('home');
+Route::get('/categories', [UserController::class, 'categoriesIndex'])->name('categories.index');
+Route::get('/categories/{category}', [UserController::class, 'showCategory'])->name('categories.show');
+Route::get('/subcategories/{subcategory}', [UserController::class, 'showSubcategory'])->name('subcategories.show');
+Route::get('/products/{product}', [UserController::class, 'showProduct'])->name('products.show');
+Route::get('/search', [UserController::class, 'searchProducts'])->name('search.products');
 
 // Auth routes group
 Route::group(['namespace' => 'Auth'], function () {
@@ -97,7 +105,12 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // Admin routes
-    Route::prefix('admin')->middleware(['role:admin'])->group(function () {
-        Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-    });
+Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    Route::get('/companies', [AdminController::class, 'companies'])->name('admin.companies.index');
+    Route::get('/companies/{company}', [AdminController::class, 'showCompany'])->name('admin.companies.show');
+    Route::get('/users', [AdminController::class, 'users'])->name('admin.users.index');
+    Route::get('/users/{user}', [AdminController::class, 'showUser'])->name('admin.users.show');
+});
+
 });

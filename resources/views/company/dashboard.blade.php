@@ -122,11 +122,11 @@
                                                                             <td>{{ $order->created_at->format('M d, Y') }}</td>
                                                                             <td>${{ number_format($order->total, 2) }}</td>
                                                                             <td>
-                                                                                <span class="badge bg-{{ 
+                                                                                <span class="badge bg-{{
                                                                                                                                         $order->status == 'pending' ? 'warning' :
                                                     ($order->status == 'processing' ? 'info' :
                                                         ($order->status == 'shipped' ? 'primary' :
-                                                            ($order->status == 'delivered' ? 'success' : 'danger'))) 
+                                                            ($order->status == 'delivered' ? 'success' : 'danger')))
                                                                                                                                     }}">
                                                                                     {{ ucfirst($order->status) }}
                                                                                 </span>
