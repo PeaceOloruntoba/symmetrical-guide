@@ -32,12 +32,18 @@ class UserController extends Controller
      * Display subcategories and some products for a specific category.
      */
     public function showCategory(Category $category): View
-    {
-        $subcategories = Category::where('parent_id', $category->id)->with('products')->get();
-        $products = Product::where('category_id', $category->id)->paginate(12); // Fetch products directly in this category
-        $categories = Category::where('parent_id', null)->get(); // Fetch main categories for the navbar
-        return view('categories.show', compact('category', 'subcategories', 'products', 'categories'));
-    }
+{
+    $subcategories = Category::where('parent_id', $category->id)->with('products')->get();
+    $products = Product::where('category_id', $category->id)->paginate(12); // Fetch products directly in this category
+    $categories = Category::where('parent_id', null)->get(); // Fetch main categories for the navbar
+    Log::info('Category ID: ' . $category->id);
+    Log::info('Subcategories: ' . $subcategories); // Laravel collections are cast to strings nicely
+    Log::info('Products Count: ' . $products->count());
+    Log::info('First Product: ' . $products->first()); // Inspect the first product if any
+    Log::info('Products Collection: ' . $products); // Log the entire paginated collection
+
+    return view('categories.show', compact('category', 'subcategories', 'products', 'categories'));
+}
 
     /**
      * Display all products for a specific subcategory.
