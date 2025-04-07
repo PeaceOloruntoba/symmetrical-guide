@@ -8,7 +8,7 @@
             @forelse ($subcategories as $subcategory)
                 <a href="{{ route('subcategories.show', $subcategory->id) }}" class="bg-white rounded-lg shadow-md p-4 text-center hover:shadow-lg transition duration-200">
                     <h3 class="text-lg font-semibold text-green-600">{{ $subcategory->name }}</h3>
-                    </a>
+                </a>
             @empty
                 <p class="text-gray-500">Keine Unterkategorien gefunden für {{ $category->name }}.</p>
             @endforelse
