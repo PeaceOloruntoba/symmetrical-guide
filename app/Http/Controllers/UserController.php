@@ -33,27 +33,15 @@ class UserController extends Controller
      */
 public function showCategory(Category $category): View
 {
-    // Fetch subcategories that belong to the current main category
-    $subcategories = Category::where('parent_id', $category->id)->get();
-
-    // Collect the names of these subcategories
-    $subcategoryNames = $subcategories->pluck('name');
-
-    // Fetch products where the 'category' column matches the name of any of these subcategories
-    $products = Product::whereIn('category', $subcategoryNames)->paginate(12);
-
-    // Fetch main categories for the navbar
+    $subcategories = Category::where('parent_id', $category->id)->with('products')->get();
     $categories = Category::where('parent_id', null)->get();
 
-    Log::info('--- Category Details ---');
     Log::info('Category ID: ' . $category->id);
     Log::info('Subcategories: ' . $subcategories);
-    Log::info('Subcategory Names: ' . $subcategoryNames);
-    Log::info('Products Count: ' . $products->count());
-    Log::info('First Product: ' . $products->first());
-    Log::info('Products Collection: ' . $products);
+    Log::info('Products Count (for main category - might be 0): ' . $subcategories->flatMap(function ($sub) { return $sub->products; })->count()); // Logging total products across subcategories
+    Log::info('First Product (from first subcategory, if any): ' . $subcategories->first()->products->first());
 
-    return view('categories.show', compact('category', 'subcategories', 'products', 'categories'));
+    return view('categories.show', compact('category', 'subcategories', 'categories'));
 }
 
     /**
