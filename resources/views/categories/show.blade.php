@@ -14,16 +14,18 @@
                         <div>
                             <span
                                 class="text-lg font-semibold text-green-600 bg-gray-300">{{ $subcategory->name }}</span>
-                            <div class="flex gap-4">
-                                @forelse ($subcategory->products->take(4) as $product)
-                                    <x-product-card :product="$product" />
+                            <div class="flex flex-row flex-wrap gap-4 mt-2">
+                                @forelse ($subcategory->products as $product)
+                                    <div class="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5">
+                                        <x-product-card :product="$product" />
+                                    </div>
                                 @empty
                                     <p class="text-gray-500">Keine Produkte in dieser Unterkategorie.</p>
                                 @endforelse
                             </div>
-                            @if ($subcategory->products->count() > 4)
+                            @if ($subcategory->products->count() > 5)
                                 <a href="{{ route('subcategories.show', $subcategory->id) }}"
-                                    class="inline-block text-green-500 hover:underline">Mehr anzeigen</a>
+                                    class="inline-block text-green-500 hover:underline mt-1">Mehr anzeigen</a>
                             @endif
                         </div>
                     @empty
@@ -32,7 +34,9 @@
                 </div>
             @endif
         </div>
-        <div>
+
+        {{-- Remove or comment out this section as you are now displaying products by subcategory --}}
+        {{-- <div>
             @if ($products->isNotEmpty())
                 <h3 class="text-xl font-semibold text-gray-700">Produkte in {{ $category->name }}</h3>
                 <div class="flex items-center gap-4">
@@ -44,6 +48,6 @@
                     {{ $products->links() }}
                 </div>
             @endif
-        </div>
+        </div> --}}
     </div>
 @endsection

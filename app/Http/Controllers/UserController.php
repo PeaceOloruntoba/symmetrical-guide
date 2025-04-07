@@ -31,16 +31,27 @@ class UserController extends Controller
     /**
      * Display subcategories and some products for a specific category.
      */
-    public function showCategory(Category $category): View
+public function showCategory(Category $category): View
 {
-    $subcategories = Category::where('parent_id', $category->id)->with('products')->get();
-    $products = Product::where('category_id', $category->id)->paginate(12); // Fetch products directly in this category
-    $categories = Category::where('parent_id', null)->get(); // Fetch main categories for the navbar
+    // Fetch subcategories that belong to the current main category
+    $subcategories = Category::where('parent_id', $category->id)->get();
+
+    // Collect the names of these subcategories
+    $subcategoryNames = $subcategories->pluck('name');
+
+    // Fetch products where the 'category' column matches the name of any of these subcategories
+    $products = Product::whereIn('category', $subcategoryNames)->paginate(12);
+
+    // Fetch main categories for the navbar
+    $categories = Category::where('parent_id', null)->get();
+
+    Log::info('--- Category Details ---');
     Log::info('Category ID: ' . $category->id);
-    Log::info('Subcategories: ' . $subcategories); // Laravel collections are cast to strings nicely
+    Log::info('Subcategories: ' . $subcategories);
+    Log::info('Subcategory Names: ' . $subcategoryNames);
     Log::info('Products Count: ' . $products->count());
-    Log::info('First Product: ' . $products->first()); // Inspect the first product if any
-    Log::info('Products Collection: ' . $products); // Log the entire paginated collection
+    Log::info('First Product: ' . $products->first());
+    Log::info('Products Collection: ' . $products);
 
     return view('categories.show', compact('category', 'subcategories', 'products', 'categories'));
 }
