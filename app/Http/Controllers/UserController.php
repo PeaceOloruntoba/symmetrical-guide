@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
 class UserController extends Controller
@@ -35,7 +36,6 @@ class UserController extends Controller
         $subcategories = Category::where('parent_id', $category->id)->with('products')->get();
         $products = Product::where('category_id', $category->id)->paginate(12); // Fetch products directly in this category
         $categories = Category::where('parent_id', null)->get(); // Fetch main categories for the navbar
-
         return view('categories.show', compact('category', 'subcategories', 'products', 'categories'));
     }
 
@@ -58,7 +58,7 @@ class UserController extends Controller
     }
 
     /**
-     * Display search results for products, including those under matching subcategories.
+     * Display search results for products.
      */
     public function searchProducts(Request $request): View
     {
@@ -66,13 +66,15 @@ class UserController extends Controller
 
         $products = Product::where('name', 'like', "%{$query}%")
                             ->orWhere('description', 'like', "%{$query}%")
-                            ->orWhereHas('category', function ($q) use ($query) {
-                                $q->where('name', 'like', "%{$query}%");
-                            })
                             ->paginate(12)
                             ->withQueryString();
 
         $categories = Category::where('parent_id', null)->get();
+
+        // Log the columns of the first few products
+        foreach ($products->take(3) as $product) {
+            Log::info('Product Attributes:', $product->getAttributes());
+        }
 
         return view('products.index', compact('products', 'query', 'categories'));
     }
