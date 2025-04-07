@@ -9,8 +9,8 @@
                 <div class="p-4">
                     <h2 class="text-xl font-semibold text-gray-700">{{ $company->company_name }}</h2>
                     <p class="text-gray-500 mb-2">{{ Str::limit($company->description, 50) }}</p>
-                    <a href="{{ route('admin.companies.show', $company) }}" class="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                        View Details
+                    <a href="{{ route('admin.companies.show', $company) }}" class="inline-block border border-[#5BB85C] hover:bg-gray-200 text-[#5BB85C] font-bold py-2 px-4 rounded">
+                        View Profile
                     </a>
                 </div>
             </div>
