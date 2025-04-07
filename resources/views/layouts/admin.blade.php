@@ -19,9 +19,7 @@
                 <div class="flex justify-between h-16">
                     <div class="flex">
                         <div class="shrink-0 flex items-center">
-                            <a href="{{ route('admin.dashboard') }}">
-                                <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
-                            </a>
+                            <a href="{{ route('admin.dashboard') }}" class="block h-9 w-auto text-xl font-semibold text-indigo-600">{{ config('app.name') }} Admin</a>
                         </div>
 
                         <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
