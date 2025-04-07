@@ -26,10 +26,10 @@
 </head>
 
 <body class="bg-gray-100">
-    <div class="min-h-screen">
+    <div class="min-h-screen flex flex-col">
         @include('layouts.navigation')
 
-        <main class="container mx-auto py-6">
+        <main class="container mx-auto py-6 flex-grow">
             @yield('content')
         </main>
 
