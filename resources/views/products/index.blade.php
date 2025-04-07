@@ -33,15 +33,15 @@
             </div>
         @endif
 
-        @if (isset($query) && $subcategories->isNotEmpty())
-            <h3 class="text-xl font-semibold text-gray-700 mt-8 mb-4">Unterkategorien passend zu Ihrer Suche</h3>
-            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                @foreach ($subcategories as $subcategory)
-                    <a href="{{ route('subcategories.show', $subcategory->id) }}" class="bg-white rounded-lg shadow-md p-4 text-center hover:shadow-lg transition duration-200">
-                        <h4 class="text-lg font-semibold text-green-600">{{ $subcategory->name }}</h4>
-                    </a>
-                @endforeach
-            </div>
-        @endif
+       @if (isset($subcategories) && $subcategories->isNotEmpty())
+    <h3 class="text-xl font-semibold text-gray-700 mt-8 mb-4">Weitere Unterkategorien</h3>
+    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+        @foreach ($subcategories as $sub)
+            <a href="{{ route('subcategories.show', $sub->id) }}" class="bg-white rounded-lg shadow-md p-4 text-center hover:shadow-lg transition duration-200">
+                <h4 class="text-lg font-semibold text-green-600">{{ $sub->name }}</h4>
+            </a>
+        @endforeach
+    </div>
+@endif
     </div>
 @endsection
