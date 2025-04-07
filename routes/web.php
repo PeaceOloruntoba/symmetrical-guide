@@ -10,7 +10,6 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CreditController;
-use App\Http\Controllers\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -98,7 +97,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // Admin routes
-Route::prefix('admin')->middleware(['role:admin'])->group(function () {
+Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/companies', [AdminController::class, 'companies'])->name('admin.companies.index');
     Route::get('/companies/{company}', [AdminController::class, 'showCompany'])->name('admin.companies.show');
