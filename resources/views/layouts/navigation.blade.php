@@ -36,7 +36,7 @@
                         </svg>
                     </button>
                     <div id="categoryDropdown"
-                        class="z-10 hidden bg-white divide-y divide-gray-100 shadow dark:bg-gray-700 absolute right-0">
+                        class="z-10 hidden bg-white divide-y divide-gray-100 shadow dark:bg-gray-700 absolute right-0 overflow-y-scroll">
                         <ul class="py-2 text-sm text-gray-700 dark:text-gray-200 text-nowrap"
                             aria-labelledby="categoryDropdownButton">
                             @if (request()->routeIs('categories.index'))
