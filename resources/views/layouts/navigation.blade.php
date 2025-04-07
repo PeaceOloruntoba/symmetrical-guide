@@ -80,10 +80,7 @@
             @if (Route::has('login'))
                 <nav class="flex items-center justify-end gap-4">
                     @auth
-                        <a href="{{ url('/dashboard') }}"
-                            class="inline-block px-3 py-1.5 text-decoration-none rounded-sm text-sm leading-normal">
-                            Dashboard
-                        </a>
+                        <span></span>
                     @else
                         <a href="{{ route('login') }}"
                             class="inline-block px-3 py-1.5 text-white bg-green-500 text-decoration-none border border-transparent rounded-sm text-sm leading-normal">
