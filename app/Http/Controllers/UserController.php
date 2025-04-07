@@ -58,20 +58,15 @@ class UserController extends Controller
     /**
      * Display search results for products, including those under matching subcategories.
      */
-    public function searchProducts(Request $request): View
+public function searchProducts(Request $request): View
     {
         $query = $request->input('search');
 
-        // Find subcategories whose names match the search query
-        $matchingSubcategories = Category::where('name', 'like', "%{$query}%")
-                                        ->whereNotNull('parent_id') // Ensure it's a subcategory
-                                        ->pluck('id');
-
-        // Find products whose names or descriptions match the query,
-        // OR whose category_id matches one of the matching subcategories
         $products = Product::where('name', 'like', "%{$query}%")
                             ->orWhere('description', 'like', "%{$query}%")
-                            ->orWhereIn('category_id', $matchingSubcategories)
+                            ->orWhereHas('category', function ($q) use ($query) {
+                                $q->where('name', 'like', "%{$query}%");
+                            })
                             ->paginate(12)
                             ->withQueryString();
 
