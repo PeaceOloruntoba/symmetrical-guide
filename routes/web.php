@@ -17,12 +17,12 @@ use App\Http\Controllers\CreditController;
 |--------------------------------------------------------------------------
 */
 
-// // Public routes
 // Route::get('/', function () {
-//     return view('welcome');
-// })->name('welcome');
+    //     return view('welcome');
+    // })->name('welcome');
 
 
+// Public routes
 Route::get('/', [UserController::class, 'index'])->name('home');
 Route::get('/categories', [UserController::class, 'categoriesIndex'])->name('categories.index');
 Route::get('/categories/{category}', [UserController::class, 'showCategory'])->name('categories.show');
