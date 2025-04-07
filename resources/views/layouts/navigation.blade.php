@@ -4,7 +4,6 @@
             <a href="{{ route('home') }}"
                 class="text-decoration-none text-indigo-600 text-xl font-semibold">{{ config('app.name', 'Germanware') }}</a>
         </div>
-
         <div class="flex items-center w-full gap-8">
             <form action="{{ route('search.products') }}" method="GET"
                 class="relative rounded-full overflow-hidden border border-green-500 w-full text-sm">
@@ -32,7 +31,8 @@
                             Kategorien
                         @endif
                         <svg class="h-5 w-5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
+                            </path>
                         </svg>
                     </button>
                     <div id="categoryDropdown"
@@ -76,17 +76,32 @@
                 @endif
             </div>
         </div>
+        <div class="text-nowrap">
+            @if (Route::has('login'))
+                <nav class="flex items-center justify-end gap-4">
+                    @auth
+                        <a href="{{ url('/dashboard') }}"
+                            class="inline-block px-3 py-1.5 text-decoration-none rounded-sm text-sm leading-normal">
+                            Dashboard
+                        </a>
+                    @else
+                        <a href="{{ route('login') }}"
+                            class="inline-block px-3 py-1.5 text-white bg-green-500 text-decoration-none border border-transparent rounded-sm text-sm leading-normal">
+                            Log in
+                        </a>
+                    @endauth
+                </nav>
+            @endif
+        </div>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const dropdownButton = document.getElementById('categoryDropdownButton');
             const dropdownDiv = document.getElementById('categoryDropdown');
-
             if (dropdownButton && dropdownDiv) {
                 dropdownButton.addEventListener('click', () => {
                     dropdownDiv.classList.toggle('hidden');
                 });
-
                 document.addEventListener('click', (event) => {
                     if (!dropdownDiv.contains(event.target) && !dropdownButton.contains(event.target)) {
                         dropdownDiv.classList.add('hidden');
