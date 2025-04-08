@@ -9,11 +9,11 @@
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <span class="badge bg-success">Subscription Plans</span>
+                        <span class="badge bg-success">订阅计划</span>
                         <h1 class="mt-2 mb-0">{{ $company->company_name }}</h1>
                     </div>
                     <a href="{{ route('company.subscription.index') }}" class="btn btn-outline-secondary">
-                        <i class="fas fa-arrow-left me-2"></i> Back to Subscription
+                        <i class="fas fa-arrow-left me-2"></i> 返回订阅
                     </a>
                 </div>
             </div>
@@ -33,7 +33,7 @@
             <div class="col-md-12">
                 <div class="card shadow-sm mb-4">
                     <div class="card-header bg-white">
-                        <h5 class="mb-0">Select Subscription Plan</h5>
+                        <h5 class="mb-0">选择订阅计划</h5>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -42,7 +42,7 @@
                                     <div class="card h-100 {{ $plan->is_popular ? 'border-success' : '' }}">
                                         @if($plan->is_popular)
                                             <div class="card-header bg-success text-white text-center">
-                                                <strong>MOST POPULAR</strong>
+                                                <strong>最受欢迎</strong>
                                             </div>
                                         @endif
                                         <div class="card-body">
@@ -53,22 +53,22 @@
                                             <ul class="list-group list-group-flush mb-4">
                                                 @if($plan->has_chat)
                                                     <li class="list-group-item border-0 px-0">
-                                                        <i class="fas fa-check-circle text-success me-2"></i> Chat Support
+                                                        <i class="fas fa-check-circle text-success me-2"></i> 聊天支持
                                                     </li>
                                                 @endif
                                                 @if($plan->has_company_list)
                                                     <li class="list-group-item border-0 px-0">
-                                                        <i class="fas fa-check-circle text-success me-2"></i> Company Listing
+                                                        <i class="fas fa-check-circle text-success me-2"></i> 公司列表
                                                     </li>
                                                 @endif
                                                 @if($plan->has_product_page)
                                                     <li class="list-group-item border-0 px-0">
-                                                        <i class="fas fa-check-circle text-success me-2"></i> Product Pages
+                                                        <i class="fas fa-check-circle text-success me-2"></i> 产品页面
                                                     </li>
                                                 @endif
                                                 @if($plan->has_wallet_system)
                                                     <li class="list-group-item border-0 px-0">
-                                                        <i class="fas fa-check-circle text-success me-2"></i> Wallet System
+                                                        <i class="fas fa-check-circle text-success me-2"></i> 钱包系统
                                                     </li>
                                                 @endif
                                             </ul>
@@ -78,7 +78,7 @@
                                                 <input type="hidden" name="plan_id" value="{{ $plan->id }}">
                                                 <button type="submit"
                                                     class="btn btn-{{ $plan->is_popular ? 'success' : 'outline-success' }} w-100">
-                                                    Subscribe Now
+                                                    立即订阅
                                                 </button>
                                             </form>
                                         </div>

@@ -9,7 +9,7 @@
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <span class="badge bg-success">Products</span>
+                        <span class="badge bg-success">产品</span>
                         <h1 class="mt-2 mb-0">{{ $company->company_name }}</h1>
                     </div>
                 </div>
@@ -22,7 +22,7 @@
         <!-- Create Product Form -->
         <div class="card shadow-sm">
             <div class="card-body">
-                <h4 class="mb-4">Publish Product</h4>
+                <h4 class="mb-4">发布产品</h4>
 
                 @if(session('error'))
                     <div class="alert alert-danger">
@@ -35,7 +35,7 @@
 
                     <div class="row mb-3">
                         <div class="col-md-4">
-                            <label for="name" class="form-label">Product name</label>
+                            <label for="name" class="form-label">产品名称</label>
                             <input type="text" class="form-control @error('name') is-invalid @enderror" id="name"
                                 name="name" value="{{ old('name') }}">
                             @error('name')
@@ -43,10 +43,10 @@
                             @enderror
                         </div>
                         <div class="col-md-4">
-                            <label for="category" class="form-label">Category</label>
+                            <label for="category" class="form-label">类别</label>
                             <select class="form-select @error('category_id') is-invalid @enderror" id="category"
                                 name="category_id">
-                                <option value="" selected disabled>Category</option>
+                                <option value="" selected disabled>类别</option>
                                 @foreach($categories as $category)
                                     <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
                                         {{ $category->name }}
@@ -58,7 +58,7 @@
                             @enderror
                         </div>
                         <div class="col-md-4">
-                            <label for="price" class="form-label">Price</label>
+                            <label for="price" class="form-label">价格</label>
                             <input type="number" step="0.01" class="form-control @error('price') is-invalid @enderror"
                                 id="price" name="price" value="{{ old('price') }}">
                             @error('price')
@@ -68,7 +68,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="description" class="form-label">Job description and requirements</label>
+                        <label for="description" class="form-label">工作描述和要求</label>
                         <textarea class="form-control @error('description') is-invalid @enderror" id="description"
                             name="description" rows="6">{{ old('description') }}</textarea>
                         @error('description')
@@ -77,7 +77,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label">Colors</label>
+                        <label class="form-label">颜色</label>
                         <div class="d-flex align-items-center">
                             <div id="selected-colors" class="d-flex flex-wrap gap-2 me-2">
                                 @if(old('colors'))
@@ -92,7 +92,7 @@
                             </div>
                             <button type="button" class="btn btn-sm btn-outline-success" data-bs-toggle="modal"
                                 data-bs-target="#addColorModal">
-                                <i class="fas fa-plus"></i> Add colors
+                                <i class="fas fa-plus"></i> 添加颜色
                             </button>
                         </div>
                         <div id="colors-container">
@@ -108,11 +108,11 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label">Product pictures</label>
+                        <label class="form-label">产品图片</label>
                         <div class="d-flex align-items-center">
                             <button type="button" class="btn btn-sm btn-outline-success"
                                 onclick="document.getElementById('product_images').click()">
-                                <i class="fas fa-plus"></i> Product pictures
+                                <i class="fas fa-plus"></i> 产品图片
                             </button>
                             <input type="file" id="product_images" name="product_images[]" multiple class="d-none" accept="image/*"
                                 onchange="previewImages(this)">
@@ -129,11 +129,11 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label">Certificate</label>
+                        <label class="form-label">证书</label>
                         <div class="input-group">
                             <button type="button" class="btn btn-outline-success"
                                 onclick="document.getElementById('certificate').click()">
-                                <i class="fas fa-file-upload me-2"></i> Upload Certificate
+                                <i class="fas fa-file-upload me-2"></i> 上传证书
                             </button>
                             <input type="file" id="certificate" name="certificate" class="d-none" accept=".pdf,.doc,.docx"
                                 onchange="updateCertificateLabel(this)">
@@ -145,8 +145,8 @@
                     </div>
 
                     <div class="d-flex justify-content-end gap-2 mt-4">
-                        <a href="{{ route('company.products.index') }}" class="btn btn-outline-secondary">Cancel</a>
-                        <button type="submit" class="btn btn-success">Publish Product</button>
+                        <a href="{{ route('company.products.index') }}" class="btn btn-outline-secondary">取消</a>
+                        <button type="submit" class="btn btn-success">发布产品</button>
                     </div>
                 </form>
             </div>
@@ -158,18 +158,18 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addColorModalLabel">Add color</h5>
+                    <h5 class="modal-title" id="addColorModalLabel">添加颜色</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="colorInput" class="form-label">Enter the color...</label>
-                        <input type="text" class="form-control" id="colorInput" placeholder="Blue">
+                        <label for="colorInput" class="form-label">输入颜色...</label>
+                        <input type="text" class="form-control" id="colorInput" placeholder="蓝色">
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-success" onclick="addColor()">Add</button>
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-success" onclick="addColor()">添加</button>
                 </div>
             </div>
         </div>

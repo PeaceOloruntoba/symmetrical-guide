@@ -10,10 +10,10 @@
                 <div class="card shadow-sm">
                     <div class="card-body p-4 p-md-5">
                         <div class="d-flex flex-column">
-                            <h1 class="display-5 fw-bold text-success mb-2" style="color: #31572C !important;">Login</h1>
+                            <h1 class="display-5 fw-bold text-success mb-2" style="color: #31572C !important;">登录</h1>
                         </div>
-                        <a class="index_link" href="{{ route('register') }}">No account? <span
-                                class="index_span">Register</span></a>
+                        <a class="index_link" href="{{ route('register') }}">没有账户？<span
+                                class="index_span">注册</span></a>
 
                         @if(session('error'))
                             <div class="alert alert-danger mt-3">
@@ -24,9 +24,9 @@
                         <form class="mt-5" method="POST" action="{{ route('login') }}">
                             @csrf
                             <div class="mb-3">
-                                <label for="email" class="form-label">Email Address</label>
+                                <label for="email" class="form-label">电子邮箱</label>
                                 <input type="email" class="form-control @error('email') is-invalid @enderror" id="email"
-                                    name="email" value="{{ old('email') }}" placeholder="Enter your email" required
+                                    name="email" value="{{ old('email') }}" placeholder="请输入您的电子邮箱" required
                                     autocomplete="email" autofocus>
                                 @error('email')
                                     <span class="invalid-feedback">
@@ -35,9 +35,9 @@
                                 @enderror
                             </div>
                             <div class="mb-3">
-                                <label for="password" class="form-label">Password</label>
+                                <label for="password" class="form-label">密码</label>
                                 <input type="password" class="form-control @error('password') is-invalid @enderror"
-                                    id="password" name="password" placeholder="Enter your password" required
+                                    id="password" name="password" placeholder="请输入您的密码" required
                                     autocomplete="current-password">
                                 @error('password')
                                     <span class="invalid-feedback">
@@ -49,13 +49,13 @@
                                 <div style="display: flex; align-items: center;">
                                     <input type="checkbox" id="remember" name="remember" {{ old('remember') ? 'checked' : '' }} 
                                            style="width: auto; height: auto; margin: 0; position: relative; top: 1px;">
-                                    <span style="font-size: 16px; color: #6C757D; margin-left: 8px;">Remember Me</span>
+                                    <span style="font-size: 16px; color: #6C757D; margin-left: 8px;">记住我</span>
                                 </div>
                                 <a href="{{ route('password.request') }}"
-                                    style="color: #5BB85C; text-decoration: none; font-size: 16px;">Forgot Password?</a>
+                                    style="color: #5BB85C; text-decoration: none; font-size: 16px;">忘记密码？</a>
                             </div>
                             <button type="submit" class="btn w-100 py-2"
-                                style="background-color: #5BB85C; color: white;">Login</button>
+                                style="background-color: #5BB85C; color: white;">登录</button>
                         </form>
                     </div>
                 </div>

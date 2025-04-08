@@ -9,7 +9,7 @@
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <span class="badge bg-success">Subscription</span>
+                        <span class="badge bg-success">订阅</span>
                         <h1 class="mt-2 mb-0">{{ $company->company_name }}</h1>
                     </div>
                 </div>
@@ -30,57 +30,57 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-6">
-                        <h4>Subscription Status</h4>
+                        <h4>订阅状态</h4>
                         @if($activeSubscription)
                             <div class="d-flex align-items-center">
-                                <span class="badge bg-success me-2">Active</span>
+                                <span class="badge bg-success me-2">有效</span>
                                 <h5 class="mb-0">{{ $activeSubscription->plan->name }}</h5>
                             </div>
                             <p class="text-muted mt-2">
-                                <strong>Started:</strong> {{ $activeSubscription->starts_at->format('M d, Y') }}<br>
-                                <strong>Expires:</strong> {{ $activeSubscription->ends_at ? $activeSubscription->ends_at->format('M d, Y') : 'Never' }}<br>
-                                <strong>Price:</strong> ${{ number_format($activeSubscription->plan->price, 2) }}/{{ $activeSubscription->plan->billing_period }}
+                                <strong>开始日期:</strong> {{ $activeSubscription->starts_at->format('M d, Y') }}<br>
+                                <strong>到期日期:</strong> {{ $activeSubscription->ends_at ? $activeSubscription->ends_at->format('M d, Y') : '永不' }}<br>
+                                <strong>价格:</strong> ${{ number_format($activeSubscription->plan->price, 2) }}/{{ $activeSubscription->plan->billing_period }}
                             </p>
                             
-                            <h5 class="mt-4">Plan Features</h5>
+                            <h5 class="mt-4">计划特点</h5>
                             <ul class="list-group list-group-flush">
                                 @if($activeSubscription->plan->has_chat)
                                     <li class="list-group-item px-0">
-                                        <i class="fas fa-check-circle text-success me-2"></i> Chat Support
+                                        <i class="fas fa-check-circle text-success me-2"></i> 聊天支持
                                     </li>
                                 @endif
                                 @if($activeSubscription->plan->has_company_list)
                                     <li class="list-group-item px-0">
-                                        <i class="fas fa-check-circle text-success me-2"></i> Company Listing
+                                        <i class="fas fa-check-circle text-success me-2"></i> 公司列表
                                     </li>
                                 @endif
                                 @if($activeSubscription->plan->has_product_page)
                                     <li class="list-group-item px-0">
-                                        <i class="fas fa-check-circle text-success me-2"></i> Product Pages
+                                        <i class="fas fa-check-circle text-success me-2"></i> 产品页面
                                     </li>
                                 @endif
                                 @if($activeSubscription->plan->has_wallet_system)
                                     <li class="list-group-item px-0">
-                                        <i class="fas fa-check-circle text-success me-2"></i> Wallet System
+                                        <i class="fas fa-check-circle text-success me-2"></i> 钱包系统
                                     </li>
                                 @endif
                             </ul>
                         @else
                             <div class="d-flex align-items-center">
-                                <span class="badge bg-danger me-2">Inactive</span>
-                                <p class="mb-0">No active subscription</p>
+                                <span class="badge bg-danger me-2">未激活</span>
+                                <p class="mb-0">没有有效订阅</p>
                             </div>
                             <p class="text-muted mt-2">
-                                You need an active subscription to access dashboard, products, and orders.
+                                您需要有效的订阅才能访问控制面板、产品和订单。
                             </p>
                         @endif
                     </div>
                     <div class="col-md-6 text-md-end">
                         <a href="{{ route('company.subscription.create') }}" class="btn btn-success mt-3">
                             @if($activeSubscription)
-                                <i class="fas fa-sync-alt me-2"></i> Change Plan
+                                <i class="fas fa-sync-alt me-2"></i> 更改计划
                             @else
-                                <i class="fas fa-plus me-2"></i> Subscribe Now
+                                <i class="fas fa-plus me-2"></i> 立即订阅
                             @endif
                         </a>
                     </div>
@@ -91,18 +91,18 @@
         <!-- Subscription History -->
         <div class="card shadow-sm">
             <div class="card-header bg-white">
-                <h5 class="mb-0">Subscription History</h5>
+                <h5 class="mb-0">订阅历史</h5>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th>Plan</th>
-                                <th>Start Date</th>
-                                <th>End Date</th>
-                                <th>Status</th>
-                                <th class="text-end">Price</th>
+                                <th>计划</th>
+                                <th>开始日期</th>
+                                <th>结束日期</th>
+                                <th>状态</th>
+                                <th class="text-end">价格</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -113,18 +113,18 @@
                                     <td>{{ $subscription->ends_at ? $subscription->ends_at->format('M d, Y') : 'Never' }}</td>
                                     <td>
                                         @if($subscription->status == 'active' && (!$subscription->ends_at || $subscription->ends_at->isFuture()))
-                                            <span class="badge bg-success">Active</span>
+                                            <span class="badge bg-success">有效</span>
                                         @elseif($subscription->status == 'canceled')
-                                            <span class="badge bg-warning">Canceled</span>
+                                            <span class="badge bg-warning">已取消</span>
                                         @else
-                                            <span class="badge bg-secondary">Expired</span>
+                                            <span class="badge bg-secondary">已过期</span>
                                         @endif
                                     </td>
                                     <td class="text-end">${{ number_format($subscription->plan->price, 2) }}/{{ $subscription->plan->billing_period }}</td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="5" class="text-center py-4">No subscription history found</td>
+                                    <td colspan="5" class="text-center py-4">未找到订阅历史</td>
                                 </tr>
                             @endforelse
                         </tbody>
