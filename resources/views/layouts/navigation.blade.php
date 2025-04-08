@@ -1,8 +1,8 @@
 <nav class="bg-white shadow py-3">
     <div class="w-full mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-8">
         <div class="flex items-center">
-            <a href="{{ route('home') }}"
-                class="text-decoration-none text-indigo-600 text-xl font-semibold">{{ config('app.name', 'Germanware') }}</a>
+            <span
+                class="text-decoration-none text-[#5BB85C] text-xl font-semibold cursor-pointer">{{ config('app.name', 'Germanware') }}</span>
         </div>
         <div class="flex items-center w-full gap-8">
             <form action="{{ route('search.products') }}" method="GET"
@@ -19,76 +19,14 @@
                     </svg>
                 </button>
             </form>
-            <div class="ml-4 relative">
-                @if (isset($categories))
-                    <button id="categoryDropdownButton" data-dropdown-toggle="categoryDropdown"
-                        class="inline-flex items-center text-gray-700 hover:text-green-500 font-medium text-nowrap">
-                        @if (request()->routeIs('categories.index'))
-                            Alle Kategorien
-                        @elseif (isset($category))
-                            {{ $category->name }}
-                        @else
-                            Kategorien
-                        @endif
-                        <svg class="h-5 w-5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
-                            </path>
-                        </svg>
-                    </button>
-                    <div id="categoryDropdown"
-                        class="z-10 hidden bg-white divide-y divide-gray-100 shadow dark:bg-gray-700 absolute right-0 overflow-y-scroll">
-                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200 text-nowrap"
-                            aria-labelledby="categoryDropdownButton">
-                            @if (request()->routeIs('categories.index'))
-                                @foreach ($categories as $category)
-                                    <li>
-                                        <a href="{{ route('categories.show', $category->id) }}"
-                                            class="block p-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{ $category->name }}</a>
-                                    </li>
-                                @endforeach
-                                <li>
-                                    <a href="{{ route('home') }}"
-                                        class="block p-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Zurück
-                                        zur Startseite</a>
-                                </li>
-                            @elseif (isset($subcategories) && $subcategories->isNotEmpty())
-                                @foreach ($subcategories as $subcategory)
-                                    <li>
-                                        <a href="{{ route('subcategories.show', $subcategory->id) }}"
-                                            class="block p-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{ $subcategory->name }}</a>
-                                    </li>
-                                @endforeach
-                            @else
-                                @foreach ($categories as $category)
-                                    <li>
-                                        <a href="{{ route('categories.show', $category->id) }}"
-                                            class="block p-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{ $category->name }}</a>
-                                    </li>
-                                @endforeach
-                                <li>
-                                    <a href="{{ route('categories.index') }}"
-                                        class="block p-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Alle
-                                        Kategorien</a>
-                                </li>
-                            @endif
-                        </ul>
-                    </div>
-                @endif
-            </div>
+            <a href="{{ route('home') }}"
+                class="block p-2 font-semibold text-md text-decoration-none text-[#5BB85C] !important">Kategorie</a>
         </div>
         <div class="text-nowrap">
-            @if (Route::has('login'))
-                <nav class="flex items-center justify-end gap-4">
-                    @auth
-                        <span></span>
-                    @else
-                        <a href="{{ route('login') }}"
-                            class="inline-block px-3 py-1.5 text-white bg-green-500 text-decoration-none border border-transparent rounded-sm text-sm leading-normal">
-                            Log in
-                        </a>
-                    @endauth
-                </nav>
-            @endif
+            <a href="{{ route('login') }}"
+                class="inline-block px-3 py-1.5 text-white bg-green-500 text-decoration-none border border-transparent rounded-sm text-sm leading-normal">
+                Log in
+            </a>
         </div>
     </div>
     <script>
