@@ -23,7 +23,7 @@ use App\Http\Controllers\CreditController;
 
 
 // Public routes
-Route::get('/', [UserController::class, 'index'])->name('home');
+Route::get('/home', [UserController::class, 'index'])->name('home');
 Route::get('/categories', [UserController::class, 'categoriesIndex'])->name('categories.index');
 Route::get('/categories/{category}', [UserController::class, 'showCategory'])->name('categories.show');
 Route::get('/subcategories/{subcategory}', [UserController::class, 'showSubcategory'])->name('subcategories.show');
@@ -65,14 +65,7 @@ Route::group(['namespace' => 'Auth'], function () {
 
 // Protected routes
 Route::middleware(['auth'])->group(function () {
-    Route::get('/home', [HomeController::class, 'index'])->name('home');
-
-    // User routes
-    Route::prefix('user')->middleware(['role:user'])->group(function () {
-        Route::get('/dashboard', [UserController::class, 'dashboard'])->name('user.dashboard');
-        Route::get('/profile', [UserController::class, 'profile'])->name('user.profile');
-        Route::put('/profile', [UserController::class, 'updateProfile'])->name('user.profile.update');
-    });
+    // Route::get('/home', [HomeController::class, 'index'])->name('home');
 
     // Company routes
     Route::middleware(['auth', 'role:company'])->prefix('company')->name('company.')->group(function () {

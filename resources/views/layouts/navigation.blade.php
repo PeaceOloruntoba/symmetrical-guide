@@ -19,43 +19,14 @@
                     </svg>
                 </button>
             </form>
-            <div class="ml-4">
-                @if (isset($categories))
-                    <button id="categoryDropdownButton" data-dropdown-toggle="categoryDropdown"
-                        class="inline-flex items-center text-gray-700 hover:text-green-500 font-medium text-nowrap">
-                        @if (request()->routeIs('categories.index'))
-                            Alle Kategorien
-                        @elseif (isset($category))
-                            {{ $category->name }}
-                        @else
-                            Kategorien
-                        @endif
-                        <svg class="h-5 w-5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
-                            </path>
-                        </svg>
-                    </button>
-                    <div id="categoryDropdown"
-                        class="z-10 hidden bg-white divide-y divide-gray-100 shadow dark:bg-gray-700 right-0 overflow-y-scroll">
-                        <a href="{{ route('home') }}"
-                            class="block p-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Kategorie</a>
-                    </div>
-                @endif
-            </div>
+            <a href="{{ route('home') }}"
+                class="block p-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Kategorie</a>
         </div>
         <div class="text-nowrap">
-            @if (Route::has('login'))
-                <nav class="flex items-center justify-end gap-4">
-                    @auth
-                        <span></span>
-                    @else
-                        <a href="{{ route('login') }}"
-                            class="inline-block px-3 py-1.5 text-white bg-green-500 text-decoration-none border border-transparent rounded-sm text-sm leading-normal">
-                            Log in
-                        </a>
-                    @endauth
-                </nav>
-            @endif
+            <a href="{{ route('login') }}"
+                class="inline-block px-3 py-1.5 text-white bg-green-500 text-decoration-none border border-transparent rounded-sm text-sm leading-normal">
+                Log in
+            </a>
         </div>
     </div>
     <script>
