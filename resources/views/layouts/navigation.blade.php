@@ -37,7 +37,7 @@
                     </button>
                     <div id="categoryDropdown"
                         class="z-10 hidden bg-white divide-y divide-gray-100 shadow dark:bg-gray-700 right-0 overflow-y-scroll">
-                        <a href="{{ route('/') }}"
+                        <a href="{{ route('home') }}"
                             class="block p-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Kategorie</a>
                     </div>
                 @endif
