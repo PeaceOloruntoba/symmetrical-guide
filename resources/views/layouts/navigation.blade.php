@@ -19,7 +19,7 @@
                     </svg>
                 </button>
             </form>
-            <div class="ml-4 relative">
+            <div class="ml-4">
                 @if (isset($categories))
                     <button id="categoryDropdownButton" data-dropdown-toggle="categoryDropdown"
                         class="inline-flex items-center text-gray-700 hover:text-green-500 font-medium text-nowrap">
@@ -36,42 +36,9 @@
                         </svg>
                     </button>
                     <div id="categoryDropdown"
-                        class="z-10 hidden bg-white divide-y divide-gray-100 shadow dark:bg-gray-700 absolute right-0 overflow-y-scroll">
-                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200 text-nowrap"
-                            aria-labelledby="categoryDropdownButton">
-                            @if (request()->routeIs('categories.index'))
-                                @foreach ($categories as $category)
-                                    <li>
-                                        <a href="{{ route('categories.show', $category->id) }}"
-                                            class="block p-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{ $category->name }}</a>
-                                    </li>
-                                @endforeach
-                                <li>
-                                    <a href="{{ route('home') }}"
-                                        class="block p-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Zurück
-                                        zur Startseite</a>
-                                </li>
-                            @elseif (isset($subcategories) && $subcategories->isNotEmpty())
-                                @foreach ($subcategories as $subcategory)
-                                    <li>
-                                        <a href="{{ route('subcategories.show', $subcategory->id) }}"
-                                            class="block p-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{ $subcategory->name }}</a>
-                                    </li>
-                                @endforeach
-                            @else
-                                @foreach ($categories as $category)
-                                    <li>
-                                        <a href="{{ route('categories.show', $category->id) }}"
-                                            class="block p-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">{{ $category->name }}</a>
-                                    </li>
-                                @endforeach
-                                <li>
-                                    <a href="{{ route('categories.index') }}"
-                                        class="block p-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Alle
-                                        Kategorien</a>
-                                </li>
-                            @endif
-                        </ul>
+                        class="z-10 hidden bg-white divide-y divide-gray-100 shadow dark:bg-gray-700 right-0 overflow-y-scroll">
+                        <a href="{{ route('/') }}"
+                            class="block p-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Kategorie</a>
                     </div>
                 @endif
             </div>
