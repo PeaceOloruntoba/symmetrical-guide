@@ -9,11 +9,11 @@
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <span class="badge bg-success">Products</span>
+                        <span class="badge bg-success">产品</span>
                         <h1 class="mt-2 mb-0">{{ $company->company_name }}</h1>
                     </div>
                     <a href="{{ route('company.products.create') }}" class="btn btn-success">
-                        <i class="fas fa-plus me-2"></i> Add New Product
+                        <i class="fas fa-plus me-2"></i> 添加新产品
                     </a>
                 </div>
             </div>
@@ -35,10 +35,10 @@
                 @if($products->isEmpty())
                     <div class="text-center py-5">
                         <i class="fas fa-box fa-3x text-muted mb-3"></i>
-                        <h3>No Products Yet</h3>
-                        <p class="text-muted">Start adding your products to showcase them to customers.</p>
+                        <h3>暂无产品</h3>
+                        <p class="text-muted">开始添加您的产品以向客户展示。</p>
                         <a href="{{ route('company.products.create') }}" class="btn btn-success mt-3">
-                            <i class="fas fa-plus me-2"></i> Add Your First Product
+                            <i class="fas fa-plus me-2"></i> 添加您的第一个产品
                         </a>
                     </div>
                 @else
@@ -62,7 +62,7 @@
 
                                             <div class="position-absolute top-0 end-0 p-2">
                                                 <span class="badge bg-{{ $product->is_active ? 'success' : 'secondary' }}">
-                                                    {{ $product->is_active ? 'Active' : 'Inactive' }}
+                                                    {{ $product->is_active ? '激活' : '未激活' }}
                                                 </span>
                                             </div>
                                         </div>
@@ -88,14 +88,14 @@
                                             <div class="d-flex justify-content-between">
                                                 <a href="{{ route('company.products.edit', $product) }}"
                                                     class="btn btn-sm btn-outline-primary">
-                                                    <i class="fas fa-edit me-1"></i> Edit
+                                                    <i class="fas fa-edit me-1"></i> 编辑
                                                 </a>
                                                 <form action="{{ route('company.products.destroy', $product) }}" method="POST"
-                                                    onsubmit="return confirm('Are you sure you want to delete this product?');">
+                                                    onsubmit="return confirm('您确定要删除此产品吗？');">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-sm btn-outline-danger">
-                                                        <i class="fas fa-trash me-1"></i> Delete
+                                                        <i class="fas fa-trash me-1"></i> 删除
                                                     </button>
                                                 </form>
                                             </div>

@@ -100,6 +100,7 @@ Route::middleware(['auth'])->group(function () {
             // Orders
             Route::get('/orders', [CompanyController::class, 'orders'])->name('orders.index');
             Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+            Route::put('/orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.update-status');
         });
     });
 

@@ -10,10 +10,10 @@
                 <div class="card shadow-sm">
                     <div class="card-body p-4 p-md-5">
                         <div class="d-flex flex-column">
-                            <h1 class="display-5 fw-bold text-success mb-2" style="color: #31572C !important;">Reset
-                                Password</h1>
+                            <h1 class="display-5 fw-bold text-success mb-2" style="color: #31572C !important;">重置
+                                密码</h1>
                         </div>
-                        <a class="index_link" href="{{ route('login') }}">Back to <span class="index_span">Login</span></a>
+                        <a class="index_link" href="{{ route('login') }}">返回<span class="index_span">登录</span></a>
 
                         @if(session('error'))
                             <div class="alert alert-danger mt-3">
@@ -30,9 +30,9 @@
                         <form class="mt-5" method="POST" action="{{ route('password.email') }}">
                             @csrf
                             <div class="mb-4">
-                                <label for="email" class="form-label">Email Address</label>
+                                <label for="email" class="form-label">电子邮箱</label>
                                 <input type="email" class="form-control @error('email') is-invalid @enderror" id="email"
-                                    name="email" value="{{ old('email') }}" placeholder="Enter your email" required
+                                    name="email" value="{{ old('email') }}" placeholder="请输入您的电子邮箱" required
                                     autocomplete="email" autofocus>
                                 @error('email')
                                     <span class="invalid-feedback">
@@ -41,7 +41,7 @@
                                 @enderror
                             </div>
                             <button type="submit" class="btn w-100 py-2"
-                                style="background-color: #5BB85C; color: white;">Send Password Reset Link</button>
+                                style="background-color: #5BB85C; color: white;">发送密码重置链接</button>
                         </form>
                     </div>
                 </div>

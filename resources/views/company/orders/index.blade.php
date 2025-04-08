@@ -9,7 +9,7 @@
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <span class="badge bg-success">Orders</span>
+                        <span class="badge bg-success">订单</span>
                         <h1 class="mt-2 mb-0">{{ $company->company_name }}</h1>
                     </div>
                 </div>
@@ -33,34 +33,34 @@
                 <div class="mb-4">
                     <form action="{{ route('company.orders.index') }}" method="GET" class="row g-3">
                         <div class="col-md-3">
-                            <label for="status" class="form-label">Status</label>
+                            <label for="status" class="form-label">状态</label>
                             <select name="status" id="status" class="form-select">
-                                <option value="">All Statuses</option>
-                                <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending
+                                <option value="">所有状态</option>
+                                <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>待处理
                                 </option>
                                 <option value="processing" {{ request('status') == 'processing' ? 'selected' : '' }}>
-                                    Processing</option>
-                                <option value="shipped" {{ request('status') == 'shipped' ? 'selected' : '' }}>Shipped
+                                    处理中</option>
+                                <option value="shipped" {{ request('status') == 'shipped' ? 'selected' : '' }}>已发货
                                 </option>
-                                <option value="delivered" {{ request('status') == 'delivered' ? 'selected' : '' }}>Delivered
+                                <option value="delivered" {{ request('status') == 'delivered' ? 'selected' : '' }}>已送达
                                 </option>
-                                <option value="cancelled" {{ request('status') == 'cancelled' ? 'selected' : '' }}>Cancelled
+                                <option value="cancelled" {{ request('status') == 'cancelled' ? 'selected' : '' }}>已取消
                                 </option>
                             </select>
                         </div>
                         <div class="col-md-3">
-                            <label for="date_from" class="form-label">Date From</label>
+                            <label for="date_from" class="form-label">开始日期</label>
                             <input type="date" class="form-control" id="date_from" name="date_from"
                                 value="{{ request('date_from') }}">
                         </div>
                         <div class="col-md-3">
-                            <label for="date_to" class="form-label">Date To</label>
+                            <label for="date_to" class="form-label">结束日期</label>
                             <input type="date" class="form-control" id="date_to" name="date_to"
                                 value="{{ request('date_to') }}">
                         </div>
                         <div class="col-md-3 d-flex align-items-end">
-                            <button type="submit" class="btn btn-primary me-2">Filter</button>
-                            <a href="{{ route('company.orders.index') }}" class="btn btn-secondary">Reset</a>
+                            <button type="submit" class="btn btn-primary me-2">筛选</button>
+                            <a href="{{ route('company.orders.index') }}" class="btn btn-secondary">重置</a>
                         </div>
                     </form>
                 </div>
@@ -68,20 +68,20 @@
                 @if(isset($orders) && $orders->isEmpty())
                     <div class="text-center py-5">
                         <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
-                        <h3>No Orders Yet</h3>
-                        <p class="text-muted">You haven't received any orders yet.</p>
+                        <h3>暂无订单</h3>
+                        <p class="text-muted">您尚未收到任何订单。</p>
                     </div>
                 @elseif(isset($orders))
                     <div class="table-responsive">
                         <table class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th>Order ID</th>
-                                    <th>Customer</th>
-                                    <th>Date</th>
-                                    <th>Total</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
+                                    <th>订单编号</th>
+                                    <th>客户</th>
+                                    <th>日期</th>
+                                    <th>总额</th>
+                                    <th>状态</th>
+                                    <th>操作</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -93,18 +93,18 @@
                                                     <td>${{ number_format($order->total, 2) }}</td>
                                                     <td>
                                                         <span class="badge bg-{{ 
-                                                                                            $order->status == 'pending' ? 'warning' :
+                                                                                                                    $order->status == 'pending' ? 'warning' :
                                     ($order->status == 'processing' ? 'info' :
                                         ($order->status == 'shipped' ? 'primary' :
                                             ($order->status == 'delivered' ? 'success' : 'danger'))) 
-                                                                                        }}">
+                                                                                                                }}">
                                                             {{ ucfirst($order->status) }}
                                                         </span>
                                                     </td>
                                                     <td>
                                                         <a href="{{ route('company.orders.show', $order) }}"
                                                             class="btn btn-sm btn-outline-primary">
-                                                            <i class="fas fa-eye me-1"></i> View
+                                                            <i class="fas fa-eye me-1"></i> 查看
                                                         </a>
                                                     </td>
                                                 </tr>
