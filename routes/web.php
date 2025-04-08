@@ -23,6 +23,7 @@ use App\Http\Controllers\SubscriptionController;
 
 
 // Public routes
+Route::get('/', [UserController::class, 'index'])->name('home');
 Route::get('/home', [UserController::class, 'index'])->name('home');
 Route::get('/categories', [UserController::class, 'categoriesIndex'])->name('categories.index');
 Route::get('/categories/{category}', [UserController::class, 'showCategory'])->name('categories.show');
