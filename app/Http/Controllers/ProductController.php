@@ -132,8 +132,19 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
+        // Explicitly load the colors relationship
+        $product->load(['colors', 'images', 'certificates', 'categories']);
+
+        // Debug: Check if colors are loaded
+        \Log::info('Product colors for product ID ' . $product->id . ':', [
+            'colors_count' => $product->colors ? $product->colors->count() : 0,
+            'colors_data' => $product->colors
+        ]);
+
+        $company = Auth::user()->company;
         $categories = Category::where('is_active', true)->orderBy('name')->get();
-        return view('company.products.edit', compact('product', 'categories'));
+
+        return view('company.products.edit', compact('product', 'categories', 'company'));
     }
 
     /**
@@ -155,29 +166,38 @@ class ProductController extends Controller
             'certificate' => 'nullable|file|mimes:pdf,doc,docx|max:5120',
             'delete_images' => 'nullable|array',
             'delete_images.*' => 'exists:product_images,id',
+            'is_active' => 'nullable|boolean',
         ]);
 
-        // Update product
+        // Log the colors being submitted for debugging
+        \Log::info('Colors submitted for product ID ' . $product->id . ':', [
+            'colors' => $request->colors ?? []
+        ]);
+
+        // Update product basic info
         $product->update([
             'name' => $request->name,
             'description' => $request->description,
             'price' => $request->price,
+            'is_active' => $request->has('is_active'),
         ]);
 
         // Update category
         $product->categories()->sync([$request->category_id]);
 
         // Handle colors
-        if ($request->has('colors')) {
-            // Delete existing colors
-            $product->colors()->delete();
+        // First, delete all existing colors for this product
+        ProductColor::where('product_id', $product->id)->delete();
 
-            // Add new colors
+        // Then add the new colors if any were submitted
+        if ($request->has('colors') && is_array($request->colors)) {
             foreach ($request->colors as $color) {
-                ProductColor::create([
-                    'product_id' => $product->id,
-                    'color' => $color,
-                ]);
+                if (!empty($color)) {
+                    ProductColor::create([
+                        'product_id' => $product->id,
+                        'color' => $color,
+                    ]);
+                }
             }
         }
 

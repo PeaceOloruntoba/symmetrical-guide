@@ -32,6 +32,9 @@
                             <x-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.*')">
                                 {{ __('Users') }}
                             </x-nav-link>
+                            <x-nav-link :href="route('admin.plans.index')" :active="request()->routeIs('admin.plans.*')">
+                                Subscription Plans
+                            </x-nav-link>
                         </div>
                     </div>
 
@@ -67,6 +70,9 @@
                     </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('admin.users.index')" :active="request()->routeIs('admin.users.*')">
                         {{ __('Users') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('admin.plans.index')" :active="request()->routeIs('admin.plans.*')">
+                        Subscription Plans
                     </x-responsive-nav-link>
                 </div>
 

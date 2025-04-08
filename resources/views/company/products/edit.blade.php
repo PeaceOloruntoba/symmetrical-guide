@@ -82,11 +82,18 @@
                         <label class="form-label">Colors</label>
                         <div class="d-flex align-items-center">
                             <div id="selected-colors" class="d-flex flex-wrap gap-2 me-2">
-                                @foreach($product->colors ?? [] as $color)
+                                @php
+                                    // Get colors from either the relationship or the attribute
+                                    $productColors = $product->colors()->count() > 0
+                                        ? $product->colors()->get()->pluck('color')->toArray()
+                                        : (is_array($product->colors) ? $product->colors : []);
+                                @endphp
+
+                                @foreach($productColors as $color)
                                     <span class="badge rounded-pill" style="background-color: {{ $color }}">
                                         {{ $color }}
                                         <button type="button" class="btn-close btn-close-white ms-2"
-                                            onclick="removeColor('{{ $color }}')"></button>
+                                            onclick="removeColor('{{ str_replace(['#', ' '], '_', $color) }}')"></button>
                                     </span>
                                 @endforeach
                             </div>
@@ -96,8 +103,9 @@
                             </button>
                         </div>
                         <div id="colors-container">
-                            @foreach($product->colors ?? [] as $color)
-                                <input type="hidden" name="colors[]" value="{{ $color }}" id="color-{{ $color }}">
+                            @foreach($productColors as $color)
+                                <input type="hidden" name="colors[]" value="{{ $color }}"
+                                    id="color-{{ str_replace(['#', ' '], '_', $color) }}">
                             @endforeach
                         </div>
                         @error('colors')
@@ -108,37 +116,37 @@
                     <div class="mb-3">
                         <label class="form-label">Current Images</label>
                         <div class="d-flex flex-wrap gap-3 mb-3">
-                            @foreach($product->images as $image)
-                                <div class="position-relative">
-                                    <img src="{{ asset('storage/' . $image->image_path) }}" alt="Product Image"
-                                        class="img-thumbnail" style="width: 100px; height: 100px; object-fit: cover;">
-                                    <div class="position-absolute top-0 end-0 d-flex">
-                                        <button type="button" class="btn btn-sm btn-danger"
-                                            onclick="document.getElementById('delete-image-{{ $image->id }}').submit();">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
+                            @if($product->images && count($product->images) > 0)
+                                @foreach($product->images as $image)
+                                    <div class="position-relative">
+                                        <img src="{{ asset('storage/' . $image->image_path) }}" class="img-thumbnail"
+                                            style="width: 100px; height: 100px; object-fit: cover;">
+                                        <div class="position-absolute top-0 end-0">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="delete_images[]"
+                                                    value="{{ $image->id }}" id="delete-image-{{ $image->id }}">
+                                                <label class="form-check-label" for="delete-image-{{ $image->id }}">
+                                                    Delete
+                                                </label>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <form id="delete-image-{{ $image->id }}"
-                                        action="{{ route('company.products.images.destroy', $image) }}" method="POST"
-                                        class="d-none">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
-                                </div>
-                            @endforeach
+                                @endforeach
+                            @endif
                         </div>
+                    </div>
 
+                    <div class="mb-3">
                         <label class="form-label">Add New Images</label>
-                        <input type="file" class="form-control @error('new_images') is-invalid @enderror"
-                            name="new_images[]" multiple accept="image/*" onchange="previewNewImages(this)">
-
-                        <!-- New image previews -->
-                        <div id="new-image-previews" class="d-flex flex-wrap gap-2 mt-2"></div>
-
-                        @error('new_images')
+                        <input type="file" class="form-control" id="product_images" name="product_images[]" multiple
+                            accept="image/*" onchange="previewNewImages(this)">
+                        <div id="new-image-previews" class="d-flex flex-wrap gap-2 mt-2">
+                            <!-- New image previews will be displayed here -->
+                        </div>
+                        @error('product_images')
                             <div class="text-danger mt-1">{{ $message }}</div>
                         @enderror
-                        @error('new_images.*')
+                        @error('product_images.*')
                             <div class="text-danger mt-1">{{ $message }}</div>
                         @enderror
                     </div>
@@ -146,26 +154,14 @@
                     <div class="mb-3">
                         <label class="form-label">Certificate</label>
                         <div class="input-group">
-                            <button type="button" class="btn btn-outline-success"
-                                onclick="document.getElementById('certificate').click()">
-                                <i class="fas fa-file-upload me-2"></i> Upload Certificate
-                            </button>
-                            <input type="file" id="certificate" name="certificate" class="d-none" accept=".pdf,.doc,.docx"
+                            <input type="file" class="form-control" id="certificate" name="certificate"
                                 onchange="updateCertificateLabel(this)">
-                            <span class="input-group-text flex-grow-1" id="certificate-label">
-                                @if($product->certificate)
-                                    {{ $product->certificate->name }}
+                            <label class="input-group-text" for="certificate" id="certificate-label">
+                                @if($product->certificates && $product->certificates->count() > 0)
+                                    {{ $product->certificates->first()->name }}
                                 @endif
-                            </span>
+                            </label>
                         </div>
-                        @if($product->certificate)
-                            <div class="mt-2">
-                                <a href="{{ Storage::url($product->certificate->certificate_path) }}" target="_blank"
-                                    class="btn btn-sm btn-outline-primary">
-                                    <i class="fas fa-file-download me-1"></i> Download Current Certificate
-                                </a>
-                            </div>
-                        @endif
                         @error('certificate')
                             <div class="text-danger mt-1">{{ $message }}</div>
                         @enderror
@@ -215,17 +211,30 @@
 
     @push('scripts')
         <script>
+            // Add this at the beginning of your script section to debug
+            console.log('Product colors:', @json($product->colors));
+
             function addColor() {
                 const colorInput = document.getElementById('colorInput');
                 const color = colorInput.value.trim();
 
                 if (color) {
+                    // Check if this color already exists
+                    const existingInput = document.querySelector(`input[value="${color}"]`);
+                    if (existingInput) {
+                        alert('This color is already added');
+                        return;
+                    }
+
+                    // Create a safe ID by replacing spaces and special characters
+                    const safeColorId = color.replace(/[^a-zA-Z0-9]/g, '_');
+
                     // Add color badge
                     const selectedColors = document.getElementById('selected-colors');
                     const colorBadge = document.createElement('span');
                     colorBadge.className = 'badge rounded-pill';
                     colorBadge.style.backgroundColor = color;
-                    colorBadge.innerHTML = `${color} <button type="button" class="btn-close btn-close-white ms-2" onclick="removeColor('${color}')"></button>`;
+                    colorBadge.innerHTML = `${color} <button type="button" class="btn-close btn-close-white ms-2" onclick="removeColor('${safeColorId}')"></button>`;
                     selectedColors.appendChild(colorBadge);
 
                     // Add hidden input
@@ -234,7 +243,7 @@
                     input.type = 'hidden';
                     input.name = 'colors[]';
                     input.value = color;
-                    input.id = `color-${color}`;
+                    input.id = `color-${safeColorId}`;
                     colorsContainer.appendChild(input);
 
                     // Clear input and close modal
@@ -244,17 +253,35 @@
                 }
             }
 
-            function removeColor(color) {
+            function removeColor(safeColorId) {
                 // Remove the badge
                 const badge = event.target.closest('.badge');
-                badge.remove();
+                if (badge) {
+                    badge.remove();
+                }
 
                 // Remove the hidden input
-                const input = document.getElementById(`color-${color}`);
+                const input = document.getElementById(`color-${safeColorId}`);
                 if (input) {
                     input.remove();
                 }
             }
+
+            // Initialize existing colors with safe IDs
+            document.addEventListener('DOMContentLoaded', function () {
+                const colorBadges = document.querySelectorAll('#selected-colors .badge');
+                colorBadges.forEach(badge => {
+                    const colorText = badge.textContent.trim();
+                    const originalColor = colorText.replace(/\s+.*$/, ''); // Get text before any whitespace
+                    const safeColorId = originalColor.replace(/[^a-zA-Z0-9]/g, '_');
+
+                    // Update the onclick handler with the safe ID
+                    const closeButton = badge.querySelector('.btn-close');
+                    if (closeButton) {
+                        closeButton.setAttribute('onclick', `removeColor('${safeColorId}')`);
+                    }
+                });
+            });
 
             function previewNewImages(input) {
                 const previewContainer = document.getElementById('new-image-previews');
@@ -267,12 +294,12 @@
                             const preview = document.createElement('div');
                             preview.className = 'position-relative';
                             preview.innerHTML = `
-                                        <img src="${e.target.result}" class="img-thumbnail" style="width: 100px; height: 100px; object-fit: cover;">
-                                        <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0" 
-                                                onclick="this.parentElement.remove()">
-                                            <i class="fas fa-times"></i>
-                                        </button>
-                                    `;
+                                                                <img src="${e.target.result}" class="img-thumbnail" style="width: 100px; height: 100px; object-fit: cover;">
+                                                                <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0" 
+                                                                        onclick="this.parentElement.remove()">
+                                                                    <i class="fas fa-times"></i>
+                                                                </button>
+                                                            `;
                             previewContainer.appendChild(preview);
                         }
 

@@ -9,7 +9,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\OrderController;
-use App\Http\Controllers\CreditController;
+use App\Http\Controllers\SubscriptionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,8 +18,8 @@ use App\Http\Controllers\CreditController;
 */
 
 // Route::get('/', function () {
-    //     return view('welcome');
-    // })->name('welcome');
+//     return view('welcome');
+// })->name('welcome');
 
 
 // Public routes
@@ -69,41 +69,59 @@ Route::middleware(['auth'])->group(function () {
 
     // Company routes
     Route::middleware(['auth', 'role:company'])->prefix('company')->name('company.')->group(function () {
-        Route::get('/dashboard', [CompanyController::class, 'dashboard'])->name('dashboard');
+        // Routes that don't require subscription
         Route::get('/profile', [CompanyController::class, 'profile'])->name('profile');
         Route::put('/profile', [CompanyController::class, 'updateProfile'])->name('profile.update');
 
-        // Products
-        Route::get('/products', [ProductController::class, 'index'])->name('products.index');
-        Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
-        Route::post('/products', [ProductController::class, 'store'])->name('products.store');
+        // Subscription routes
+        Route::get('/subscription', [SubscriptionController::class, 'index'])->name('subscription.index');
+        Route::get('/subscription/create', [SubscriptionController::class, 'create'])->name('subscription.create');
+        Route::post('/subscription/checkout', [SubscriptionController::class, 'checkout'])->name('subscription.checkout');
+        Route::get('/subscription/success', [SubscriptionController::class, 'success'])->name('subscription.success');
 
-        // Product routes with company ownership check middleware
-        Route::middleware(['check.product.owner'])->group(function () {
-            Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
-            Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
-            Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
-            Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
-            Route::post('/products/images/{image}/order', [ProductController::class, 'updateImageOrder'])->name('products.images.order');
+        // Routes that require subscription
+        Route::middleware(['subscription'])->group(function () {
+            Route::get('/dashboard', [CompanyController::class, 'dashboard'])->name('dashboard');
+
+            // Products
+            Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+            Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
+            Route::post('/products', [ProductController::class, 'store'])->name('products.store');
+
+            // Product routes with company ownership check middleware
+            Route::middleware(['check.product.owner'])->group(function () {
+                Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
+                Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
+                Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
+                Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
+                Route::post('/products/images/{image}/order', [ProductController::class, 'updateImageOrder'])->name('products.images.order');
+            });
+
+            // Orders
+            Route::get('/orders', [CompanyController::class, 'orders'])->name('orders.index');
+            Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
         });
-
-        // Orders
-        Route::get('/orders', [CompanyController::class, 'orders'])->name('orders.index');
-        Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
-
-        // Credits
-        Route::get('/credits', [CompanyController::class, 'credits'])->name('credits.index');
-        Route::get('/credits/purchase', [CompanyController::class, 'purchaseCredits'])->name('credits.purchase');
-        Route::post('/credits/purchase', [CreditController::class, 'purchase'])->name('credits.process');
     });
 
     // Admin routes
-Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
-    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-    Route::get('/companies', [AdminController::class, 'companies'])->name('admin.companies.index');
-    Route::get('/companies/{company}', [AdminController::class, 'showCompany'])->name('admin.companies.show');
-    Route::get('/users', [AdminController::class, 'users'])->name('admin.users.index');
-    Route::get('/users/{user}', [AdminController::class, 'showUser'])->name('admin.users.show');
-});
+    Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(function () {
+        Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+
+        // Company management
+        Route::get('/companies', [AdminController::class, 'companies'])->name('companies.index');
+        Route::get('/companies/{company}', [AdminController::class, 'showCompany'])->name('companies.show');
+
+        // User management
+        Route::get('/users', [AdminController::class, 'users'])->name('users.index');
+        Route::get('/users/{user}', [AdminController::class, 'showUser'])->name('users.show');
+
+        // Plan management
+        Route::get('/plans', [AdminController::class, 'plans'])->name('plans.index');
+        Route::get('/plans/create', [AdminController::class, 'createPlan'])->name('plans.create');
+        Route::post('/plans', [AdminController::class, 'storePlan'])->name('plans.store');
+        Route::get('/plans/{plan}/edit', [AdminController::class, 'editPlan'])->name('plans.edit');
+        Route::put('/plans/{plan}', [AdminController::class, 'updatePlan'])->name('plans.update');
+        Route::delete('/plans/{plan}', [AdminController::class, 'destroyPlan'])->name('plans.destroy');
+    });
 
 });

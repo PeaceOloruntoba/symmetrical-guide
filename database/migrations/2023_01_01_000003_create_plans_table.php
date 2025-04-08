@@ -21,6 +21,7 @@ return new class extends Migration {
             $table->boolean('has_product_page')->default(false);
             $table->boolean('has_wallet_system')->default(false);
             $table->boolean('is_active')->default(true);
+            $table->boolean('is_popular')->default(false);
             $table->timestamps();
         });
 
@@ -33,15 +34,6 @@ return new class extends Migration {
             $table->string('status'); // active, canceled, expired
             $table->timestamps();
         });
-
-        Schema::create('credits', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->integer('amount');
-            $table->string('type'); // purchased, bonus, used
-            $table->text('description')->nullable();
-            $table->timestamps();
-        });
     }
 
     /**
@@ -49,7 +41,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('credits');
         Schema::dropIfExists('subscriptions');
         Schema::dropIfExists('plans');
     }
