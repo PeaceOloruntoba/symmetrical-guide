@@ -2,7 +2,7 @@
     <div class="w-full mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-8">
         <div class="flex items-center">
             <a href="{{ route('home') }}"
-                class="text-decoration-none text-indigo-600 text-xl font-semibold">{{ config('app.name', 'Germanware') }}</a>
+                class="text-decoration-none text-[#5BB85C] text-xl font-semibold">{{ config('app.name', 'Germanware') }}</a>
         </div>
         <div class="flex items-center w-full gap-8">
             <form action="{{ route('search.products') }}" method="GET"
@@ -20,7 +20,7 @@
                 </button>
             </form>
             <a href="{{ route('home') }}"
-                class="block p-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Kategorie</a>
+                class="block p-2 font-semibold text-md text-decoration-none text-[#5BB85C]">Kategorie</a>
         </div>
         <div class="text-nowrap">
             <a href="{{ route('login') }}"
