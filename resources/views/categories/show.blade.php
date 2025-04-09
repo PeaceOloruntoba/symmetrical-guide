@@ -8,7 +8,7 @@
         </div>
         <div class="flex flex-col gap-2">
             @if ($subcategories->isNotEmpty())
-                <span class="text-xl font-semibold text-gray-700">Unterkategorien</span>
+                {{-- <span class="text-xl font-semibold text-gray-700">Unterkategorien</span> --}}
                 <div class="flex flex-col gap-3">
                     @forelse ($subcategories as $subcategory)
                         <div>
