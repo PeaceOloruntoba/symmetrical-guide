@@ -38,10 +38,12 @@
                             </div>
                             <p class="text-muted mt-2">
                                 <strong>开始日期:</strong> {{ $activeSubscription->starts_at->format('M d, Y') }}<br>
-                                <strong>到期日期:</strong> {{ $activeSubscription->ends_at ? $activeSubscription->ends_at->format('M d, Y') : '永不' }}<br>
-                                <strong>价格:</strong> ${{ number_format($activeSubscription->plan->price, 2) }}/{{ $activeSubscription->plan->billing_period }}
+                                <strong>到期日期:</strong>
+                                {{ $activeSubscription->ends_at ? $activeSubscription->ends_at->format('M d, Y') : '永不' }}<br>
+                                <strong>价格:</strong>
+                                €{{ number_format($activeSubscription->plan->price, 2) }}/{{ $activeSubscription->plan->billing_period }}
                             </p>
-                            
+
                             <h5 class="mt-4">计划特点</h5>
                             <ul class="list-group list-group-flush">
                                 @if($activeSubscription->plan->has_chat)
@@ -120,7 +122,9 @@
                                             <span class="badge bg-secondary">已过期</span>
                                         @endif
                                     </td>
-                                    <td class="text-end">${{ number_format($subscription->plan->price, 2) }}/{{ $subscription->plan->billing_period }}</td>
+                                    <td class="text-end">
+                                        €{{ number_format($subscription->plan->price, 2) }}/{{ $subscription->plan->billing_period }}
+                                    </td>
                                 </tr>
                             @empty
                                 <tr>
@@ -158,4 +162,4 @@
             }
         </style>
     @endpush
-@endsection 
+@endsection

@@ -104,11 +104,13 @@ class CompanyController extends Controller
         // Validate company data
         $request->validate([
             'company_name' => ['required', 'string', 'max:255'],
+            'company_id' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'website' => ['nullable', 'url'],
             'phone' => ['nullable', 'string', 'max:20'],
             'address' => ['nullable', 'string'],
             'logo' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
+            'company_paper' => ['nullable', 'file', 'mimes:pdf,doc,docx', 'max:5120'],
         ]);
 
         // Update user data
@@ -127,17 +129,29 @@ class CompanyController extends Controller
             $logoPath = $request->file('logo')->store('company-logos', 'public');
         }
 
+        // Handle company paper upload
+        $paperPath = $company->company_paper;
+        if ($request->hasFile('company_paper')) {
+            // Delete old paper if exists
+            if ($paperPath && Storage::exists($paperPath)) {
+                Storage::delete($paperPath);
+            }
+            $paperPath = $request->file('company_paper')->store('company-papers', 'public');
+        }
+
         // Update company data
         $company->update([
             'company_name' => $request->company_name,
+            'company_id' => $request->company_id,
             'description' => $request->description,
             'website' => $request->website,
             'phone' => $request->phone,
             'address' => $request->address,
             'logo' => $logoPath,
+            'company_paper' => $paperPath,
         ]);
 
-        return redirect()->route('company.profile')->with('success', 'Profile updated successfully');
+        return redirect()->route('company.profile')->with('success', '公司资料已成功更新');
     }
 
     /**

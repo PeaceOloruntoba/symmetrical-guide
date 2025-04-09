@@ -52,6 +52,10 @@ class ProductController extends Controller
             'name' => 'required|string|max:255',
             'category_id' => 'required|exists:categories,id',
             'price' => 'required|numeric|min:0',
+            'width' => 'nullable|numeric|min:0',
+            'height' => 'nullable|numeric|min:0',
+            'length' => 'nullable|numeric|min:0',
+            'weight' => 'nullable|numeric|min:0',
             'description' => 'required|string',
             'colors' => 'nullable|array',
             'product_images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -66,6 +70,10 @@ class ProductController extends Controller
             'name' => $request->name,
             'description' => $request->description,
             'price' => $request->price,
+            'width' => $request->width,
+            'height' => $request->height,
+            'length' => $request->length,
+            'weight' => $request->weight,
             'is_active' => true,
         ]);
 
@@ -110,7 +118,7 @@ class ProductController extends Controller
         }
 
         return redirect()->route('company.products.index')
-            ->with('success', 'Product created successfully.');
+            ->with('success', '产品创建成功');
     }
 
     /**
@@ -160,6 +168,10 @@ class ProductController extends Controller
             'name' => 'required|string|max:255',
             'category_id' => 'required|exists:categories,id',
             'price' => 'required|numeric|min:0',
+            'width' => 'nullable|numeric|min:0',
+            'height' => 'nullable|numeric|min:0',
+            'length' => 'nullable|numeric|min:0',
+            'weight' => 'nullable|numeric|min:0',
             'description' => 'required|string',
             'colors' => 'nullable|array',
             'product_images.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -179,6 +191,10 @@ class ProductController extends Controller
             'name' => $request->name,
             'description' => $request->description,
             'price' => $request->price,
+            'width' => $request->width,
+            'height' => $request->height,
+            'length' => $request->length,
+            'weight' => $request->weight,
             'is_active' => $request->has('is_active'),
         ]);
 
@@ -250,7 +266,7 @@ class ProductController extends Controller
         }
 
         return redirect()->route('company.products.index')
-            ->with('success', 'Product updated successfully.');
+            ->with('success', '产品更新成功');
     }
 
     /**
@@ -279,7 +295,7 @@ class ProductController extends Controller
         $product->delete();
 
         return redirect()->route('company.products.index')
-            ->with('success', 'Product deleted successfully.');
+            ->with('success', '产品已成功删除');
     }
 
     /**
@@ -297,6 +313,6 @@ class ProductController extends Controller
 
         $image->update(['order' => $request->order]);
 
-        return back()->with('success', 'Image order updated successfully.');
+        return back()->with('success', '图片顺序更新成功');
     }
 }

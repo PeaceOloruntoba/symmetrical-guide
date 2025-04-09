@@ -46,7 +46,7 @@ class SubscriptionController extends Controller
     }
 
     /**
-     * Create a checkout session for Stripe.
+     * Create a checkout session for Stripe with Alipay.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
@@ -65,14 +65,14 @@ class SubscriptionController extends Controller
 
         try {
             $session = Session::create([
-                'payment_method_types' => ['card'],
+                'payment_method_types' => ['alipay', 'card'], // Include both Alipay and card
                 'line_items' => [
                     [
                         'price_data' => [
                             'currency' => strtolower($plan->currency),
                             'product_data' => [
                                 'name' => $plan->name,
-                                'description' => 'Subscription to ' . $plan->name,
+                                'description' => '订阅 ' . $plan->name,
                             ],
                             'unit_amount' => $plan->price * 100, // Amount in cents
                         ],
@@ -86,6 +86,7 @@ class SubscriptionController extends Controller
                     'user_id' => $user->id,
                     'plan_id' => $plan->id,
                 ],
+                'locale' => 'zh',
             ]);
 
             return redirect($session->url);
@@ -128,19 +129,85 @@ class SubscriptionController extends Controller
                     'user_id' => $user->id,
                     'plan_id' => $plan->id,
                     'starts_at' => now(),
-                    'ends_at' => now()->addMonth(), // Assuming monthly billing
+                    'ends_at' => $plan->billing_period === 'month' ? now()->addMonth() : now()->addYear(),
                     'status' => 'active',
+                    'transaction_id' => $session->payment_intent,
                 ]);
 
+                // Generate and send invoice
+                $this->generateAndSendInvoice($user, $plan, $subscription);
+
                 return redirect()->route('company.subscription.index')
-                    ->with('success', 'Subscription successful! Your ' . $plan->name . ' is now active.');
+                    ->with('success', '订阅成功！您的' . $plan->name . '计划现已激活。');
             } else {
                 return redirect()->route('company.subscription.create')
-                    ->with('error', 'Payment was not completed. Please try again.');
+                    ->with('error', '支付未完成。请重试。');
             }
         } catch (ApiErrorException $e) {
             return redirect()->route('company.subscription.create')
                 ->with('error', $e->getMessage());
         }
+    }
+
+    /**
+     * Generate and send invoice for subscription
+     *
+     * @param  \App\Models\User  $user
+     * @param  \App\Models\Plan  $plan
+     * @param  \App\Models\Subscription  $subscription
+     * @return void
+     */
+    private function generateAndSendInvoice($user, $plan, $subscription)
+    {
+        // Generate invoice number (IN-XXXX format)
+        $invoiceCount = Subscription::count();
+        $invoiceNumber = 'IN-' . str_pad($invoiceCount, 4, '0', STR_PAD_LEFT);
+
+        // Get company details
+        $company = $user->company;
+
+        // Create PDF using a package like barryvdh/laravel-dompdf
+        $pdf = \PDF::loadView('invoices.subscription', [
+            'user' => $user,
+            'company' => $company,
+            'plan' => $plan,
+            'subscription' => $subscription,
+            'invoiceNumber' => $invoiceNumber,
+            'invoiceDate' => now()->format('d.m.Y'),
+        ]);
+
+        $filename = 'invoice-' . $invoiceNumber . '.pdf';
+        $pdfPath = storage_path('app/invoices/' . $filename);
+
+        // Ensure the directory exists before saving
+        $directory = storage_path('app/invoices');
+        if (!file_exists($directory)) {
+            mkdir($directory, 0755, true);
+        }
+
+        // Save PDF to storage
+        $pdf->save($pdfPath);
+
+        // Send email with PDF attachment to user
+        \Mail::send('emails.invoice', [
+            'user' => $user,
+            'plan' => $plan,
+            'invoiceNumber' => $invoiceNumber
+        ], function ($message) use ($user, $pdfPath, $invoiceNumber) {
+            $message->to($user->email)
+                ->subject('您的发票 #' . $invoiceNumber)
+                ->attach($pdfPath);
+        });
+
+        // Send a separate email with PDF attachment to invoice@germanware.de
+        \Mail::send('emails.invoice', [
+            'user' => $user,
+            'plan' => $plan,
+            'invoiceNumber' => $invoiceNumber
+        ], function ($message) use ($pdfPath, $invoiceNumber) {
+            $message->to('invoice@germanware.de')
+                ->subject('您的发票 #' . $invoiceNumber)
+                ->attach($pdfPath);
+        });
     }
 }

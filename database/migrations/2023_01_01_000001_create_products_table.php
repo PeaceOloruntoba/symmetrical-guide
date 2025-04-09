@@ -16,6 +16,10 @@ return new class extends Migration {
             $table->string('name');
             $table->text('description')->nullable();
             $table->decimal('price', 10, 2);
+            $table->decimal('width', 8, 2)->nullable();
+            $table->decimal('height', 8, 2)->nullable();
+            $table->decimal('length', 8, 2)->nullable();
+            $table->decimal('weight', 8, 2)->nullable();
             $table->string('category')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();

@@ -64,6 +64,17 @@
                             @enderror
                         </div>
                         <div class="col-md-6">
+                            <label for="company_id" class="form-label">公司ID</label>
+                            <input type="text" class="form-control @error('company_id') is-invalid @enderror"
+                                id="company_id" name="company_id" value="{{ old('company_id', $company->company_id) }}">
+                            @error('company_id')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
                             <label for="phone" class="form-label">电话号码</label>
                             <input type="text" class="form-control @error('phone') is-invalid @enderror" id="phone"
                                 name="phone" value="{{ old('phone', $company->phone) }}">
@@ -73,13 +84,15 @@
                         </div>
                     </div>
 
-                    <div class="mb-3">
-                        <label for="website" class="form-label">网站</label>
-                        <input type="url" class="form-control @error('website') is-invalid @enderror" id="website"
-                            name="website" value="{{ old('website', $company->website) }}">
-                        @error('website')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="website" class="form-label">网站</label>
+                            <input type="text" class="form-control @error('website') is-invalid @enderror" id="website"
+                                name="website" value="{{ old('website', $company->website) }}">
+                            @error('website')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
                     </div>
 
                     <div class="mb-3">
@@ -100,18 +113,37 @@
                         @enderror
                     </div>
 
-                    <div class="mb-4">
-                        <label for="logo" class="form-label">公司标志</label>
-                        <input type="file" class="form-control @error('logo') is-invalid @enderror" id="logo" name="logo">
-                        @error('logo')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                        @if($company->logo)
-                            <div class="mt-2">
-                                <img src="{{ Storage::url($company->logo) }}" alt="Company Logo" class="img-thumbnail"
-                                    style="max-height: 100px">
-                            </div>
-                        @endif
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label for="logo" class="form-label">公司标志</label>
+                            <input type="file" class="form-control @error('logo') is-invalid @enderror" id="logo"
+                                name="logo">
+                            @error('logo')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                            @if($company->logo)
+                                <div class="mt-2">
+                                    <img src="{{ asset('storage/' . $company->logo) }}" alt="Company Logo" class="img-thumbnail"
+                                        style="max-height: 100px;">
+                                </div>
+                            @endif
+                        </div>
+                        <div class="col-md-6">
+                            <label for="company_paper" class="form-label">公司证书</label>
+                            <input type="file" class="form-control @error('company_paper') is-invalid @enderror"
+                                id="company_paper" name="company_paper">
+                            @error('company_paper')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                            @if($company->company_paper)
+                                <div class="mt-2">
+                                    <a href="{{ asset('storage/' . $company->company_paper) }}" target="_blank"
+                                        class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-file-pdf me-1"></i> 查看当前证书
+                                    </a>
+                                </div>
+                            @endif
+                        </div>
                     </div>
 
                     <div class="d-grid">

@@ -77,7 +77,7 @@
                                                 @endif
                                             </p>
                                             <p class="card-text">
-                                                <strong>${{ number_format($product->price, 2) }}</strong>
+                                                <strong>€{{ number_format($product->price, 2) }}</strong>
                                             </p>
                                             <p class="card-text">
                                                 {{ Str::limit($product->description, 100) }}
