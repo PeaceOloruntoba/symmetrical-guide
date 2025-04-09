@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class AuthController extends Controller
@@ -53,7 +54,7 @@ class AuthController extends Controller
         }
 
         return back()
-            ->with('error', 'The provided credentials do not match our records.')
+            ->with('error', '提供的凭据与我们的记录不符。')
             ->withInput($request->only('email', 'remember'));
     }
 
@@ -70,7 +71,7 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect('/login');
     }
 
     /**
@@ -136,10 +137,13 @@ class AuthController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
             'company_name' => 'required|string|max:255',
+            'company_id' => 'required|string|max:255',
             'description' => 'required|string',
             'website' => 'required|url',
             'phone' => 'required|string|max:20',
             'address' => 'required|string',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'company_paper' => 'nullable|file|mimes:pdf,doc,docx|max:5120',
         ]);
 
         $user = User::create([
@@ -151,10 +155,25 @@ class AuthController extends Controller
 
         $user->assignRole('company');
 
+        // Handle logo upload
+        $logoPath = null;
+        if ($request->hasFile('logo')) {
+            $logoPath = $request->file('logo')->store('company-logos', 'public');
+        }
+
+        // Handle company paper upload
+        $paperPath = null;
+        if ($request->hasFile('company_paper')) {
+            $paperPath = $request->file('company_paper')->store('company-papers', 'public');
+        }
+
         Company::create([
             'user_id' => $user->id,
             'company_name' => $request->company_name,
+            'company_id' => $request->company_id,
             'description' => $request->description,
+            'logo' => $logoPath,
+            'company_paper' => $paperPath,
             'website' => $request->website,
             'phone' => $request->phone,
             'address' => $request->address,
@@ -165,7 +184,7 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        return redirect()->route('company.dashboard');
+        return redirect()->route('company.dashboard')->with('success', '公司注册成功！');
     }
 
     /**

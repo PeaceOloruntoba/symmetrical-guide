@@ -13,9 +13,9 @@ class PlanSeeder extends Seeder
     public function run(): void
     {
         Plan::create([
-            'name' => 'Basic Plan',
-            'price' => 9.99,
-            'currency' => 'USD',
+            'name' => 'test Plan',
+            'price' => 45,
+            'currency' => 'CNY',
             'billing_period' => 'month',
             'has_chat' => true,
             'has_company_list' => false,
@@ -25,30 +25,5 @@ class PlanSeeder extends Seeder
             'is_popular' => false,
         ]);
 
-        Plan::create([
-            'name' => 'Standard Plan',
-            'price' => 19.99,
-            'currency' => 'USD',
-            'billing_period' => 'month',
-            'has_chat' => true,
-            'has_company_list' => true,
-            'has_product_page' => true,
-            'has_wallet_system' => true,
-            'is_active' => true,
-            'is_popular' => true,
-        ]);
-
-        Plan::create([
-            'name' => 'Premium Plan',
-            'price' => 39.99,
-            'currency' => 'USD',
-            'billing_period' => 'month',
-            'has_chat' => true,
-            'has_company_list' => true,
-            'has_product_page' => true,
-            'has_wallet_system' => true,
-            'is_active' => true,
-            'is_popular' => false,
-        ]);
     }
 }

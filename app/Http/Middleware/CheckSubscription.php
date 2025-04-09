@@ -30,7 +30,7 @@ class CheckSubscription
 
         if (!$hasActiveSubscription) {
             return redirect()->route('company.subscription.create')
-                ->with('error', 'You need an active subscription to access this feature.');
+                ->with('error', '您需要有效的订阅才能访问此功能。');
         }
 
         return $next($request);

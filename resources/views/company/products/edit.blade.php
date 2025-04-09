@@ -69,6 +69,42 @@
                         </div>
                     </div>
 
+                    <!-- Package Dimensions -->
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label for="width" class="form-label">宽度 (cm)</label>
+                            <input type="number" step="0.01" class="form-control @error('width') is-invalid @enderror"
+                                id="width" name="width" value="{{ old('width', $product->width) }}">
+                            @error('width')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="col-md-3">
+                            <label for="height" class="form-label">高度 (cm)</label>
+                            <input type="number" step="0.01" class="form-control @error('height') is-invalid @enderror"
+                                id="height" name="height" value="{{ old('height', $product->height) }}">
+                            @error('height')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="col-md-3">
+                            <label for="length" class="form-label">长度 (cm)</label>
+                            <input type="number" step="0.01" class="form-control @error('length') is-invalid @enderror"
+                                id="length" name="length" value="{{ old('length', $product->length) }}">
+                            @error('length')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="col-md-3">
+                            <label for="weight" class="form-label">重量 (kg)</label>
+                            <input type="number" step="0.01" class="form-control @error('weight') is-invalid @enderror"
+                                id="weight" name="weight" value="{{ old('weight', $product->weight) }}">
+                            @error('weight')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+
                     <div class="mb-3">
                         <label for="description" class="form-label">描述</label>
                         <textarea class="form-control @error('description') is-invalid @enderror" id="description"
@@ -90,7 +126,7 @@
                                 @endphp
 
                                 @foreach($productColors as $color)
-                                    <span class="badge rounded-pill" style="background-color: {{ $color }}">
+                                    <span class="badge rounded-pill bg-success text-white">
                                         {{ $color }}
                                         <button type="button" class="btn-close btn-close-white ms-2"
                                             onclick="removeColor('{{ str_replace(['#', ' '], '_', $color) }}')"></button>
@@ -232,8 +268,7 @@
                     // Add color badge
                     const selectedColors = document.getElementById('selected-colors');
                     const colorBadge = document.createElement('span');
-                    colorBadge.className = 'badge rounded-pill';
-                    colorBadge.style.backgroundColor = color;
+                    colorBadge.className = 'badge rounded-pill bg-success text-white';
                     colorBadge.innerHTML = `${color} <button type="button" class="btn-close btn-close-white ms-2" onclick="removeColor('${safeColorId}')"></button>`;
                     selectedColors.appendChild(colorBadge);
 
@@ -294,12 +329,12 @@
                             const preview = document.createElement('div');
                             preview.className = 'position-relative';
                             preview.innerHTML = `
-                                                                        <img src="${e.target.result}" class="img-thumbnail" style="width: 100px; height: 100px; object-fit: cover;">
-                                                                        <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0" 
-                                                                                onclick="this.parentElement.remove()">
-                                                                            <i class="fas fa-times"></i>
-                                                                        </button>
-                                                                    `;
+                                                                                        <img src="${e.target.result}" class="img-thumbnail" style="width: 100px; height: 100px; object-fit: cover;">
+                                                                                        <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0" 
+                                                                                                onclick="this.parentElement.remove()">
+                                                                                            <i class="fas fa-times"></i>
+                                                                                        </button>
+                                                                                    `;
                             previewContainer.appendChild(preview);
                         }
 

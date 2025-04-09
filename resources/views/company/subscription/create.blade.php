@@ -47,8 +47,9 @@
                                         @endif
                                         <div class="card-body">
                                             <h4 class="card-title">{{ $plan->name }}</h4>
-                                            <h2 class="text-success mb-4">${{ number_format($plan->price, 2) }}<small
-                                                    class="text-muted">/{{ $plan->billing_period }}</small></h2>
+                                            <h2 class="text-success mb-4">€{{ number_format($plan->price, 2) }}<small
+                                                    class="text-muted">/{{ $plan->billing_period == 'month' ? '月' : '年' }}</small>
+                                            </h2>
 
                                             <ul class="list-group list-group-flush mb-4">
                                                 @if($plan->has_chat)

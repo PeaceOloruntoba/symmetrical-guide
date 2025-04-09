@@ -1535,9 +1535,13 @@
                 'password.reset',
                 'register.company',
             ]);
+
+            // Check if the current route is a company or authenticated route
+            $isCompanyPage = Str::startsWith($currentRouteName, 'company.');
+            $shouldShowNavigation = !$isAuthPage && !$isCompanyPage;
         @endphp
 
-        @if (!$isAuthPage)
+        @if ($shouldShowNavigation)
             @include('layouts.navigation')
         @endif
 
@@ -1545,14 +1549,14 @@
             @yield('content')
         </main>
 
-        @if (!$isAuthPage)
+        @if ($shouldShowNavigation)
             @include('layouts.footer')
         @endif
     </div>
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
-    </script>
+        </script>
 
     @stack('scripts')
 </body>

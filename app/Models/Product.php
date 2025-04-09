@@ -19,6 +19,10 @@ class Product extends Model
         'name',
         'description',
         'price',
+        'width',
+        'height',
+        'length',
+        'weight',
         'category',
         'is_active',
         'colors',
@@ -32,6 +36,10 @@ class Product extends Model
      */
     protected $casts = [
         'price' => 'decimal:2',
+        'width' => 'decimal:2',
+        'height' => 'decimal:2',
+        'length' => 'decimal:2',
+        'weight' => 'decimal:2',
         'is_active' => 'boolean',
         'colors' => 'array',
     ];

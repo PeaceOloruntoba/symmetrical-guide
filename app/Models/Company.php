@@ -17,8 +17,10 @@ class Company extends Model
     protected $fillable = [
         'user_id',
         'company_name',
+        'company_id',
         'description',
         'logo',
+        'company_paper',
         'website',
         'phone',
         'address',

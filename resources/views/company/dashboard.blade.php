@@ -128,7 +128,7 @@
                                                     ($order->status == 'processing' ? 'info' :
                                                         ($order->status == 'shipped' ? 'primary' :
                                                             ($order->status == 'delivered' ? 'success' : 'danger')))
-                                                                                                                                                                                                                                                            }}">
+                                                                                                                                                                                                                                                                                                    }}">
                                                                                     {{ ucfirst($order->status) }}
                                                                                 </span>
                                                                             </td>

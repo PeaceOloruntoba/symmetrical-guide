@@ -17,7 +17,8 @@
                             </div>
                         @endif
 
-                        <form class="mt-5" method="POST" action="{{ route('register.company') }}">
+                        <form class="mt-5" method="POST" action="{{ route('register.company') }}"
+                            enctype="multipart/form-data">
                             @csrf
                             <div class="mb-3">
                                 <label for="name" class="form-label">联系人姓名</label>
@@ -109,6 +110,41 @@
                                 <input type="password" class="form-control" id="password-confirm"
                                     name="password_confirmation" placeholder="请再次输入您的密码" required
                                     autocomplete="new-password">
+                            </div>
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <label for="logo" class="form-label">公司标志</label>
+                                    <input type="file" class="form-control @error('logo') is-invalid @enderror" id="logo"
+                                        name="logo">
+                                    <div class="form-text">支持的格式: JPEG, PNG, JPG, GIF (最大 2MB)</div>
+                                    @error('logo')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="company_paper" class="form-label">公司证书</label>
+                                    <input type="file" class="form-control @error('company_paper') is-invalid @enderror"
+                                        id="company_paper" name="company_paper">
+                                    <div class="form-text">支持的格式: PDF, DOC, DOCX (最大 5MB)</div>
+                                    @error('company_paper')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="company_id" class="form-label">公司ID</label>
+                                <input type="text" class="form-control @error('company_id') is-invalid @enderror"
+                                    id="company_id" name="company_id" value="{{ old('company_id') }}" placeholder="请输入公司ID"
+                                    required>
+                                @error('company_id')
+                                    <span class="invalid-feedback">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
                             <button type="submit" class="btn w-100 py-2"
                                 style="background-color: #5BB85C; color: white;">注册公司</button>
